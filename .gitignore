@@ -161,6 +161,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Mac  file sysstem
 .DS_Store
+
+# QGIS file system
 .xml
+
+# Numpy binary files
+.npy
 
