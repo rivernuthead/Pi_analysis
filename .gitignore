@@ -162,11 +162,11 @@ cython_debug/
 #.idea/
 
 # Mac  file sysstem
-*.DS_Store
+#*.DS_Store
 
 # QGIS file system
-*.xml
+#*.xml
 
 # Numpy binary files
-*.npy
+#*.npy
 
