@@ -140,17 +140,17 @@ for run in runs:
     
     # Check if the folders already exist and create them
     if not(os.path.exists(path_diff)):
-        os.mkdir(path_diff)
+        os.makedirs(path_diff)
     if not(os.path.exists(path_img)):
-        os.mkdir(path_img)
+        os.makedirs(path_img)
     if not(os.path.exists(path_report)):
-        os.mkdir(path_report)
+        os.makedirs(path_report)
     if not(os.path.exists(path_blurry_area)):
-        os.mkdir(path_blurry_area)
+        os.makedirs(path_blurry_area)
     if not(os.path.exists(os.path.join(path_blurry_area, run))):
-        os.mkdir(os.path.join(path_blurry_area, run))
+        os.makedirs(os.path.join(path_blurry_area, run))
     if not(os.path.exists(os.path.join(diff_path_out, run))):
-        os.mkdir(os.path.join(diff_path_out, run))
+        os.makedirs(os.path.join(diff_path_out, run))
 
     
     # Create a file list with all the diff name
