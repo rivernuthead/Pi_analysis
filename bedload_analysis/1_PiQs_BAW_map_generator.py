@@ -130,7 +130,7 @@ for run in runs:
 
     # SETUP DATA FOLDER
     path_input_data = os.path.join(folder_home, 'input_data')
-    path_output_data = os.path.join(path_output_data, 'output_data')
+    path_output_data = os.path.join(folder_home, 'output_data')
     diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps')
     path_diff = os.path.join(path_input_data, '2_Differences', run[0:3], run)# Set the directory path where to pick up images
     path_img = os.path.join(path_input_data, '1_Fused_images', run)

@@ -57,7 +57,7 @@ for run in runs:
     print(run)
     # Setup data folder
     path_input_data = os.path.join(folder_home, 'input_data')
-    path_output_data = os.path.join(path_output_data, 'output_data')
+    path_output_data = os.path.join(folder_home, 'output_data')
     path_diff = os.path.join(path_input_data, '2_Differences', run[0:3], run) # Set the directory path where to pick up images
     path_img = os.path.join(path_input_data, '1_Fused_images', run[0:3], run)
     path_blurry_area = os.path.join(path_output_data, '0_blurry_shaded_areas_detection','blurry_area_images')
