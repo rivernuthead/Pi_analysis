@@ -170,3 +170,8 @@ cython_debug/
 # Numpy binary files
 #*.npy
 
+# image files
+*.jpg
+*.png
+*.tif
+*.tiff
