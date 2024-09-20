@@ -173,5 +173,5 @@ cython_debug/
 # image files
 *.jpg
 *.png
-#*.tif
-#*.tiff
+*.tif
+*.tiff
