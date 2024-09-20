@@ -127,7 +127,11 @@ for run in runs:
     mask = Image.open(mask_path) # Open image as image
     mask_arr = np.array(mask)
     # -------------------------------------------------------------------------
-
+     # SET COUNTERS
+    k=0
+    j=1
+    r=0
+    m=0
     # SETUP DATA FOLDER
     path_input_data = os.path.join(folder_home, 'input_data')
     path_output_data = os.path.join(folder_home, 'output_data')
@@ -136,7 +140,8 @@ for run in runs:
     path_img = os.path.join(path_input_data, '1_Fused_images',run[0:3], run)
     path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
 
-    path_blurry_area = os.path.join(path_output_data , '0_blurry_shaded_areas', 'blurry_areas')
+    path_blurry_area = os.path.join(path_output_data , '0_blurry_shaded_areas_detection', 'blurry_area_images',run)
+    shaded_area_path = os.path.join(path_output_data , '0_blurry_shaded_areas_detection', 'shaded_area_images', run)
     
     # Check if the folders already exist and create them
     if not(os.path.exists(path_diff)):
@@ -147,10 +152,10 @@ for run in runs:
         os.makedirs(path_report)
     if not(os.path.exists(path_blurry_area)):
         os.makedirs(path_blurry_area)
-    if not(os.path.exists(os.path.join(path_blurry_area, run))):
-        os.makedirs(os.path.join(path_blurry_area, run))
-    if not(os.path.exists(os.path.join(diff_path_out, run))):
-        os.makedirs(os.path.join(diff_path_out, run))
+    if not(os.path.exists(os.path.join(path_blurry_area))):
+        os.makedirs(os.path.join(path_blurry_area))
+    if not(os.path.exists(os.path.join(diff_path_out))):
+        os.makedirs(os.path.join(diff_path_out))
 
     
     # Create a file list with all the diff name
@@ -201,7 +206,7 @@ for run in runs:
 
         diff_path = os.path.join(path_diff, name) # Define image path
         diff = Image.open(diff_path) # Open image as image
-        shaded_area_path = os.path.join(os.getcwd(), 'shaded_area_images', run)
+        
         if not os.path.exists(shaded_area_path):
             os.makedirs(shaded_area_path)
         diff_arr = np.array(diff) # Convert image in array
@@ -266,7 +271,7 @@ for run in runs:
         if index in np.array(elements): # Check if image is outlier (elements array contains all the outliers name)
             diff_arr = diff_arr-(diff_mean_array[index]-diff_mean_arr_lin_interp[index]) # Correct the differece
 
-        Image.fromarray(np.array(diff_arr)).save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + 'diff.tiff')) # Save image
+        Image.fromarray(np.array(diff_arr)).save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + 'diff.tiff')) # Save image
         
         # DEFINE BLURRY AREA FOR EACH DIFFERENCES AS THE SUM OF THE BLURRY AREAS OF THE THREE IMAGES THAT MAKE THE DIFFERENCE
         if run[1:3] == '15' or run[1:3] == '20':   
@@ -281,7 +286,7 @@ for run in runs:
             i=0
             for img_name in (name1, name2, name3):
                 # print(img_name)
-                blurry_img_path = os.path.join(folder_home, 'blurry_area_images', run, img_name[:-4] + '_blurry_thrs_fsh2.png')
+                blurry_img_path = os.path.join(path_blurry_area, img_name[:-4] + '_blurry_thrs_fsh2.png')
                 blurry = Image.open(blurry_img_path)
                 # img_path = os.path.join(path_img , img_name)
                 # img = Image.open(img_path)
@@ -300,8 +305,8 @@ for run in runs:
             blurry = blurry_arr*mask_arr # Mask considering the channel domain
             
             blurry_areas = np.where(blurry_areas==0, np.nan, blurry_areas) # Trim zero values
-            cv2.imwrite(os.path.join(path_blurry_area, run, name+'_blurry_map.png'), blurry)
-            cv2.imwrite(os.path.join(path_blurry_area, run, name+'_blurry_map.tiff'), blurry)
+            cv2.imwrite(os.path.join(path_blurry_area, name+'_blurry_map.png'), blurry)
+            cv2.imwrite(os.path.join(path_blurry_area, name+'_blurry_map.tiff'), blurry)
 
         # DEFINE THE THRESHOLS
         # Set the threshold:
@@ -398,9 +403,9 @@ for run in runs:
             
 
         # 1. NOISE REMOVING
-        shaded_area_imege_path = os.path.join(folder_home, 'shaded_area_images', run, run + '_shaded_area.tiff')
+        shaded_area_image_path = os.path.join(shaded_area_path, run + '_shaded_area.tiff')
         
-        banks_noise_bool = Image.open(shaded_area_imege_path)
+        banks_noise_bool = Image.open(shaded_area_image_path)
         banks_noise_bool = np.array(banks_noise_bool)[:dim_y,:dim_x]
         banks_noise_bool = (banks_noise_bool>0)*shad_coeff
         
@@ -413,7 +418,7 @@ for run in runs:
         # Convert and save
         if save_noise_filtering == 1:
             diff_msk = Image.fromarray(diff_arr_msk.astype(np.uint16)) # Convert array to image
-            diff_msk.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + '_noise_rm.tiff'))
+            diff_msk.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_noise_rm.tiff'))
         
 
         # 2. DIFF AVERAGING
@@ -426,7 +431,7 @@ for run in runs:
         # Convert and save
         if save_diff_averaging == 1:
             diff_avg0=Image.fromarray(np.array(diff_arr_avg0))
-            diff_avg0.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + '_avg0.tiff'))
+            diff_avg0.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_avg0.tiff'))
         
         # TODO
         # 3. THRESHOLDING
@@ -445,7 +450,7 @@ for run in runs:
         # Convert and save
         if save_thrs_maps == 1:
             diff_thrs = Image.fromarray(diff_arr_thrs.astype(np.uint16))
-            diff_thrs.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + '_thrs.tiff'))
+            diff_thrs.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_thrs.tiff'))
         
         # BLURRY AREAS ARE COMPUTED ONLY FOR q20_2 AND q15_2 RUN
         if run[1:3] == '15' or run[1:3] == '20':
@@ -478,7 +483,7 @@ for run in runs:
         # Convert and save
         if save_rso_maps == 1 :
             diff_rsm = Image.fromarray(np.array(diff_arr_rsm).astype(np.uint16))
-            diff_rsm.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + '_rm_obj.tiff'))
+            diff_rsm.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_rm_obj.tiff'))
         
         
         # AVERAGE
@@ -504,7 +509,7 @@ for run in runs:
         diff_arr_avg1 = diff_arr_avg1*diff_arr_avg1_mask
         
         # Save the ultimate image as a numpy array
-        np.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4]+ '_ultimate_map.npy'), diff_arr_avg1)
+        np.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4]+ '_ultimate_map.npy'), diff_arr_avg1)
         
         # PERFORM LINEAR DOWNSAMPLING TO OBTAIN THE LOW RESOLUTION VERSION
         BAA_map_LR5 = non_overlapping_average(diff_arr_avg1, kernel_size=5)
@@ -557,14 +562,14 @@ for run in runs:
         BAA_map_LR10 = BAA_map_LR10_US + BAA_map_LR10_DS
         
         # SAVE LOW RESOLUTION MAPS
-        np.save(os.path.join(diff_path_out, run, run + '_' + str(name)
+        np.save(os.path.join(diff_path_out, run + '_' + str(name)
                 [:-4] + '_ultimate_map_LR5.npy'), BAA_map_LR5)
-        #np.save(os.path.join(diff_path_out, run, run + '_' + str(name)
+        #np.save(os.path.join(diff_path_out, run + '_' + str(name)
                 #[:-4] + '_ultimate_map_LR10.npy'), BAA_map_LR10)
         
         # Convert and save
         diff_avg1 = Image.fromarray(np.array(diff_arr_avg1).astype(np.uint16))
-        diff_avg1.save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4]
+        diff_avg1.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4]
                                     + '_cld_avg.tiff'))
 
 
