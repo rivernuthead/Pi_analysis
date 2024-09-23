@@ -180,7 +180,7 @@ if save_single_run_merged==1:
             base_dir, subfolder_filter, file_filter, exclude_filter)
         
         np.save(os.path.join(path_output_data,'2_PiQs_BAW_stacks',run[0:3], set_name +
-                '_single_run_merged_envelope_BAA_stack_LR' + str(downsampling_dim) + '.npy'), npy_stack)
+                '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '.npy'), npy_stack)
 
         # Print the shape of the stacked array
         print(f"Stacked single runs merged array shape: {npy_stack.shape}")

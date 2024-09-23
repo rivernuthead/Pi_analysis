@@ -64,6 +64,7 @@ runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
 
 # SCRIPT MODE -----------------------------------------------------------------
 plt_show = 0
+compute_DoS_envelops = 1 # Compute the Difference of saturation envelope as the mean of DoS for each run
 
 # SCRIPT PARAMETERS -----------------------------------------------------------
 dt = 1 # Time between shoots in minutes (for plt_show = 1)
@@ -252,7 +253,7 @@ for run in runs:
 
 
 # 
-    for name in diff_names: # For each images in the folder...
+    for diff_index,name in enumerate(diff_names): # For each images in the folder...
         # print('****************')
         print(name)
         # print('****************')
@@ -432,7 +433,16 @@ for run in runs:
         if save_diff_averaging == 1:
             diff_avg0=Image.fromarray(np.array(diff_arr_avg0))
             diff_avg0.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_avg0.tiff'))
-        
+
+        # 2b. Optional: Compute DoS envelops
+        if compute_DoS_envelops == 1:
+            if diff_index == 0:
+                DoS_env = np.copy(diff_arr_avg0)
+            elif name == diff_names[-1]:
+                DoS_env = DoS_env + diff_arr_avg0
+                DoS_env = DoS_env / len(diff_names) # compute the mean DoS
+            else:
+                DoS_env = DoS_env + diff_arr_avg0
         # TODO
         # 3. THRESHOLDING
         
