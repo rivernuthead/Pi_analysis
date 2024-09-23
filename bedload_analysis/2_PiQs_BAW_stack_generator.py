@@ -105,7 +105,7 @@ for run in runs:
             str(downsampling_dim) + '.npy'), np.around(BAA_map_stack, decimals=0))
     
     # CREATE THE BOOL ENVELOPE STACK
-    BAA_map_stack_env = np.cumsum(BAA_map_stack_bool, axis =0)
+    BAA_map_stack_env = np.nansum(BAA_map_stack_bool, axis =0)
     BAA_map_stack_env_bool = (BAA_map_stack_env>0)*1
     np.save(os.path.join(path_output_stack, run + '_BAA_stack_envelope_LR' +
             str(downsampling_dim) + '.npy'), np.around(BAA_map_stack_env, decimals=2))
