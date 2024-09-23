@@ -136,7 +136,7 @@ for run in runs:
     # SETUP DATA FOLDER
     path_input_data = os.path.join(folder_home, 'input_data')
     path_output_data = os.path.join(folder_home, 'output_data')
-    diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',run[0:3],run)
+    diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',run[0:3])
     path_diff = os.path.join(path_input_data, '2_Differences', run[0:3], run)# Set the directory path where to pick up images
     path_img = os.path.join(path_input_data, '1_Fused_images',run[0:3], run)
     path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
@@ -272,7 +272,7 @@ for run in runs:
         if index in np.array(elements): # Check if image is outlier (elements array contains all the outliers name)
             diff_arr = diff_arr-(diff_mean_array[index]-diff_mean_arr_lin_interp[index]) # Correct the differece
 
-        Image.fromarray(np.array(diff_arr)).save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + 'diff.tiff')) # Save image
+        Image.fromarray(np.array(diff_arr)).save(os.path.join(diff_path_out, run, run + '_' + str(name)[:-4] + 'diff.tiff')) # Save image
         
         # DEFINE BLURRY AREA FOR EACH DIFFERENCES AS THE SUM OF THE BLURRY AREAS OF THE THREE IMAGES THAT MAKE THE DIFFERENCE
         if run[1:3] == '15' or run[1:3] == '20':   
@@ -419,7 +419,7 @@ for run in runs:
         # Convert and save
         if save_noise_filtering == 1:
             diff_msk = Image.fromarray(diff_arr_msk.astype(np.uint16)) # Convert array to image
-            diff_msk.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_noise_rm.tiff'))
+            diff_msk.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4] + '_noise_rm.tiff'))
         
 
         # 2. DIFF AVERAGING
@@ -432,25 +432,32 @@ for run in runs:
         # Convert and save
         if save_diff_averaging == 1:
             diff_avg0=Image.fromarray(np.array(diff_arr_avg0))
-            diff_avg0.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_avg0.tiff'))
-
+            diff_avg0.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4] + '_avg0.tiff'))
+        #############################################################
         # 2b. Optional: Compute DoS envelops
+        DoS_maps_list = []
         if compute_DoS_envelops == 1:
+            DoS_maps_list.append(diff_arr_avg0)
             if diff_index == 0:
                 DoS_env = np.copy(diff_arr_avg0)
+                DoS_max = np.copy(diff_arr_avg0)
             elif name == diff_names[-1]:
-                DoS_env = DoS_env + diff_arr_avg0
-                DoS_env = DoS_env / len(diff_names) # compute the mean DoS
+                DoS_env = np.where(np.isnan(diff_arr_avg0)==False, DoS_env + diff_arr_avg0, np.nan)
+                DoS_env = np.where(np.isnan(DoS_env)==False,DoS_env / len(diff_names) , np.nan) # compute the mean DoS
                 # Save the envelop
-                print('Save the DoS envelop...')
+                print('Save the DoS envelops...')
                 path_DoS = os.path.join(diff_path_out, 'DoS_maps')
                 # Check if the folders already exist and create them
                 if not(os.path.exists(path_DoS)):
                     os.makedirs(path_DoS)
                 np.save(os.path.join(path_DoS, run + '_DoS_mean_map.npy'), DoS_env)
+                # Save also the maximum
+                DoS_max = np.where(DoS_env<diff_arr_avg0, diff_arr_avg0, DoS_env)
+                np.save(os.path.join(path_DoS, run + '_DoS_max_map.npy'), DoS_max)
             else:
-                DoS_env = DoS_env + diff_arr_avg0
-                
+                DoS_env = np.where(np.isnan(diff_arr_avg0)==False, DoS_env + diff_arr_avg0, np.nan)
+                DoS_max = np.where(DoS_env<diff_arr_avg0, diff_arr_avg0, DoS_env)
+        #############################################################     
         # TODO
         # 3. THRESHOLDING
         
@@ -468,7 +475,7 @@ for run in runs:
         # Convert and save
         if save_thrs_maps == 1:
             diff_thrs = Image.fromarray(diff_arr_thrs.astype(np.uint16))
-            diff_thrs.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_thrs.tiff'))
+            diff_thrs.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4] + '_thrs.tiff'))
         
         # BLURRY AREAS ARE COMPUTED ONLY FOR q20_2 AND q15_2 RUN
         if run[1:3] == '15' or run[1:3] == '20':
@@ -501,7 +508,7 @@ for run in runs:
         # Convert and save
         if save_rso_maps == 1 :
             diff_rsm = Image.fromarray(np.array(diff_arr_rsm).astype(np.uint16))
-            diff_rsm.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4] + '_rm_obj.tiff'))
+            diff_rsm.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4] + '_rm_obj.tiff'))
         
         
         # AVERAGE
@@ -527,7 +534,7 @@ for run in runs:
         diff_arr_avg1 = diff_arr_avg1*diff_arr_avg1_mask
         
         # Save the ultimate image as a numpy array
-        np.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4]+ '_ultimate_map.npy'), diff_arr_avg1)
+        np.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4]+ '_ultimate_map.npy'), diff_arr_avg1)
         
         # PERFORM LINEAR DOWNSAMPLING TO OBTAIN THE LOW RESOLUTION VERSION
         BAA_map_LR5 = non_overlapping_average(diff_arr_avg1, kernel_size=5)
@@ -580,14 +587,14 @@ for run in runs:
         BAA_map_LR10 = BAA_map_LR10_US + BAA_map_LR10_DS
         
         # SAVE LOW RESOLUTION MAPS
-        np.save(os.path.join(diff_path_out, run + '_' + str(name)
+        np.save(os.path.join(diff_path_out,run, run + '_' + str(name)
                 [:-4] + '_ultimate_map_LR5.npy'), BAA_map_LR5)
         #np.save(os.path.join(diff_path_out, run + '_' + str(name)
                 #[:-4] + '_ultimate_map_LR10.npy'), BAA_map_LR10)
         
         # Convert and save
         diff_avg1 = Image.fromarray(np.array(diff_arr_avg1).astype(np.uint16))
-        diff_avg1.save(os.path.join(diff_path_out, run + '_' + str(name)[:-4]
+        diff_avg1.save(os.path.join(diff_path_out,run, run + '_' + str(name)[:-4]
                                     + '_cld_avg.tiff'))
 
 
