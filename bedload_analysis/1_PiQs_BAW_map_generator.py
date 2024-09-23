@@ -441,8 +441,16 @@ for run in runs:
             elif name == diff_names[-1]:
                 DoS_env = DoS_env + diff_arr_avg0
                 DoS_env = DoS_env / len(diff_names) # compute the mean DoS
+                # Save the envelop
+                print('Save the DoS envelop...')
+                path_DoS = os.path.join(diff_path_out, 'DoS_maps')
+                # Check if the folders already exist and create them
+                if not(os.path.exists(path_DoS)):
+                    os.makedirs(path_DoS)
+                np.save(os.path.join(path_DoS, run + '_DoS_mean_map.npy'), DoS_env)
             else:
                 DoS_env = DoS_env + diff_arr_avg0
+                
         # TODO
         # 3. THRESHOLDING
         
