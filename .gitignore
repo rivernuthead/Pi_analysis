@@ -168,5 +168,10 @@ cython_debug/
 *.xml
 
 # Numpy binary files
-#*.npy
+*.npy
 
+# image files
+*.jpg
+*.png
+*.tif
+*.tiff
