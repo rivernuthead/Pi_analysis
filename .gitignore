@@ -174,7 +174,7 @@ cython_debug/
 *.jpg
 *.png
 *.tif
-*.tiff
+#*.tiff
 
 # Folders
 /morphological_analysis/outputs
