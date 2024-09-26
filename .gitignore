@@ -178,3 +178,4 @@ cython_debug/
 
 # Folders
 /morphological_analysis/outputs
+#/bedload_analysis/outputs
