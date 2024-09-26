@@ -83,21 +83,29 @@ for run in runs:
     print('****************')
     print(run)
     print('****************')
+
+    # SETUP DATA FOLDER
+    path_input_data = os.path.join(folder_home, 'input_data')
+    path_output_data = os.path.join(folder_home, 'outputs')
+    path_img = os.path.join(path_input_data, '1_Fused_images',run[0:3], run)
+    path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
+    stack_dir = os.path.join(path_output_data, '2_PiQs_BAW_stacks', run[0:3], run)
+    output_path = os.path.join(path_output_data, '3_PiQs_BAW_2Dt_filter', run[0:3])
     
+    # Check if the folders already exist and create them
+    if not(os.path.exists(output_path)):
+        os.makedirs(output_path)
+        
     # LOAD MASK ---------------------------------------------------------------
-    mask_path = os.path.join(folder_home, 'mask.tif') # Define image path
+    mask_path = os.path.join(path_input_data,'masks', 'mask.tif') # Define image path
+    if '05' in run:
+        mask_path = os.path.join(path_input_data,'masks', 'Border_mask_' + run + '.tif')
     mask = Image.open(mask_path) # Open image as image
     mask_arr = np.array(mask)
     mask_arr_LR = non_overlapping_average(mask_arr, kernel_size=downsampling_dim) # perform linear downsampling
 
-    # DEFINE PATHS ------------------------------------------------------------
-    path_report = os.path.join(folder_home, 'output_report', run)
-
-    if not(os.path.exists(path_report)):
-        os.mkdir(path_report)
-        
     # DEFINE STACK PATH--------------------------------------------------------
-    stack_path = os.path.join(folder_home, 'activity_stack', run + '_BAA_stack_LR' + str(downsampling_dim) +  '.npy')
+    stack_path = os.path.join(stack_dir, run + '_BAA_stack_LR' + str(downsampling_dim) +  '.npy')
     
     # LOAD THE DATA STACK------------------------------------------------------
     stack = np.load(stack_path)
@@ -124,7 +132,7 @@ for run in runs:
 
     thrs = 0.4
     stack_bool_cld = spatial_temporal_activation_filtering(stack_bool_raw, (3,3,3), thrs)
-    np.save(os.path.join(os.path.join(folder_home, 'activity_stack/activity_stack_cleaned'), run + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy'),np.around(stack_bool_cld, decimals=0))
+    np.save(os.path.join(output_path, run + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy'),np.around(stack_bool_cld, decimals=0))
 
 #%%
 # =============================================================================
@@ -161,16 +169,16 @@ for set_name in set_names:
     downsampling_dim = 5
     
     # LOAD MASK ---------------------------------------------------------------
-    mask_path = os.path.join(folder_home, 'mask.tif') # Define image path
+    mask_path = os.path.join(path_input_data,'masks', 'mask.tif') # Define image path
     mask = Image.open(mask_path) # Open image as image
     mask_arr = np.array(mask)
     mask_arr_LR = non_overlapping_average(mask_arr, kernel_size=downsampling_dim) # perform linear downsampling
 
     # DEFINE PATHS ------------------------------------------------------------
-    path_report = os.path.join(folder_home, 'output_report', set_name)
+    path_report = os.path.join(path_output_data, 'output_report', set_name)
     
     # IMPORT STACK ------------------------------------------------------------
-    stack_path = os.path.join(os.getcwd(), 'activity_stack', set_name +
+    stack_path = os.path.join(stack_dir, set_name +
             '_single_run_merged_envelope_BAA_stack_LR' + str(downsampling_dim) + '.npy')
     stack = np.load(stack_path)
     

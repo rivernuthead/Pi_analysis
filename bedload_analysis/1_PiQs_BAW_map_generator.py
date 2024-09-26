@@ -121,13 +121,7 @@ for run in runs:
          mov_avg = 5
          eps = 0.4
     
-    # LOAD borders MASK ---------------------------------------------------------------
-    mask_path = os.path.join(folder_home,'borders_masks', 'mask.tif') # Define image path
-    if '05' in run:
-        mask_path = os.path.join(os.getcwd(),'borders_masks', 'Border_mask_' + run + '.tif')
-    mask = Image.open(mask_path) # Open image as image
-    mask_arr = np.array(mask)
-    # -------------------------------------------------------------------------
+
      # SET COUNTERS
     k=0
     j=1
@@ -135,7 +129,7 @@ for run in runs:
     m=0
     # SETUP DATA FOLDER
     path_input_data = os.path.join(folder_home, 'input_data')
-    path_output_data = os.path.join(folder_home, 'output_data')
+    path_output_data = os.path.join(folder_home, 'outputs')
     diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',run[0:3])
     path_diff = os.path.join(path_input_data, '2_Differences', run[0:3], run)# Set the directory path where to pick up images
     path_img = os.path.join(path_input_data, '1_Fused_images',run[0:3], run)
@@ -158,6 +152,13 @@ for run in runs:
     if not(os.path.exists(os.path.join(diff_path_out))):
         os.makedirs(os.path.join(diff_path_out))
 
+    # LOAD borders MASK ---------------------------------------------------------------
+    mask_path = os.path.join(path_input_data,'masks', 'mask.tif') # Define image path
+    if '05' in run:
+        mask_path = os.path.join(path_input_data,'masks', 'Border_mask_' + run + '.tif')
+    mask = Image.open(mask_path) # Open image as image
+    mask_arr = np.array(mask)
+    # -------------------------------------------------------------------------
     
     # Create a file list with all the diff name
     diff_name_files = sorted(os.listdir(path_diff))

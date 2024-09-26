@@ -70,7 +70,7 @@ for run in runs:
     print(run)
     print('****************')
     
-    path_output_data = os.path.join(folder_home, 'output_data')
+    path_output_data = os.path.join(folder_home, 'outputs')
     path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
     diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',run[0:3],run)
     path_output_stack = os.path.join(path_output_data,'2_PiQs_BAW_stacks',run[0:3], run)

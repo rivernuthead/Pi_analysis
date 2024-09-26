@@ -65,9 +65,9 @@ for run in runs:
     
     
     # LOAD borders image MASK
-    mask_path = os.path.join(folder_home,'borders_masks', 'mask.tif') # Define image path
+    mask_path = os.path.join(path_input_data,'masks', 'mask.tif') # Define image path
     if '05' in run:
-        mask_path = os.path.join(folder_home,'borders_masks', 'Border_mask_' + run + '.tif')
+        mask_path = os.path.join(path_input_data,'masks', 'Border_mask_' + run + '.tif')
     mask = Image.open(mask_path) # Open image as image
     mask_arr = np.array(mask)
     
