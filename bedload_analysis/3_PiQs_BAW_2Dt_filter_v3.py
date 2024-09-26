@@ -178,7 +178,7 @@ for set_name in set_names:
     path_report = os.path.join(path_output_data, 'output_report', set_name)
     
     # IMPORT STACK ------------------------------------------------------------
-    stack_path = os.path.join(stack_dir, set_name +
+    stack_path = os.path.join(path_output_data, '2_PiQs_BAW_stacks',run[0:3], set_name +
             '_single_run_merged_envelope_BAA_stack_LR' + str(downsampling_dim) + '.npy')
     stack = np.load(stack_path)
     
@@ -205,5 +205,5 @@ for set_name in set_names:
     stack_bool_cld = spatial_temporal_activation_filtering(stack_bool_raw, (3,3,3), thrs)
     
     # SAVE STACK DATA ---------------------------------------------------------
-    np.save(os.path.join(folder_home, 'activity_stack/activity_stack_cleaned', set_name + '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy'), np.around(stack_bool_cld, decimals=0))
+    np.save(os.path.join(path_output_data, '2_PiQs_BAW_stacks',run[0:3], set_name + '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy'), np.around(stack_bool_cld, decimals=0))
     # np.save(os.path.join(folder_home, 'activity_stack/activity_stack_cleaned', set_name + '_single_run_merged_envBAA_stack_LR' + str(downsampling_dim) + '_cld.npy'),np.around(env_stack_bool_cld, decimals=0))
