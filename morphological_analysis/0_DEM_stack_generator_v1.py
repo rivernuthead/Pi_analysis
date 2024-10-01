@@ -20,8 +20,12 @@ for run in runs:
     
     # Step 1: List all files in the folder
     home_dir = os.getcwd()
-    folder_path = os.path.join(home_dir, 'surveys',run)
-    files = os.listdir(folder_path)
+    input_folder = os.path.join(home_dir,'morphological_analysis','input_data', 'surveys',run)
+    output_folder = os.path.join(os.getcwd(), 'morphological_analysis', 'output_data', 'DEM_stack')
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    files = os.listdir(input_folder)
     
     # Step 2: Filter files based on a common part in the name
     common_part = "matrix_bed_norm"
@@ -41,7 +45,7 @@ for run in runs:
     array_dim_x = []
     array_dim_y = []
     for f in filtered_files_sorted:
-        path_DEM = os.path.join(folder_path, f)
+        path_DEM = os.path.join(input_folder, f)
         DEM = np.loadtxt(path_DEM,
                           # delimiter=',',
                           skiprows=8
@@ -58,10 +62,11 @@ for run in runs:
     # Different mask will be applied depending on the run due to different ScanArea
     # used during the laser surveys
     runs_list = ['q10_1', 'q10_2', 'q15_1', 'q20_1', 'q20_2'] # Old runs with old ScanArea
-    array_mask_name, array_mask_path = 'array_mask.txt', home_dir # Mask for runs 07 onwards
+    mask_folders_path =  os.path.join(home_dir, 'morphological_analysis', 'input_data', 'masks')
+    array_mask_name, array_mask_path = 'array_mask.txt', mask_folders_path # Mask for runs 07 onwards
 
     if run in runs_list:
-        array_mask_name, array_mask_path = 'array_mask_0.txt', home_dir
+        array_mask_name, array_mask_path = 'array_mask_0.txt', mask_folders_path
 
     # Load mask
     array_mask = np.loadtxt(os.path.join(array_mask_path, array_mask_name))
@@ -77,7 +82,7 @@ for run in runs:
     # Step 5: Load each text file as a numpy matrix and store in a list
     matrix_list = []
     for file in filtered_files:
-        file_path = os.path.join(folder_path, file)
+        file_path = os.path.join(input_folder, file)
         
         # Assuming the data in the text file is organized as rows and columns
         # Modify the loading logic based on your actual file format
@@ -90,5 +95,5 @@ for run in runs:
     stacked_matrix = np.stack(matrix_list, axis=0)
     
     # Step 6: Save the stacked matrix as a Numpy binary file
-    output_file_path = os.path.join(folder_path, run + '_DEM_stack.npy')
+    output_file_path = os.path.join(output_folder, run + '_DEM_stack.npy')
     np.save(output_file_path, stacked_matrix)
