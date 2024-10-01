@@ -67,8 +67,8 @@ plot_mode = [
 # SINGLE RUN NAME
 # run = 'q20r9'
 # ARRAY OF RUNS
-runs = ['q05_1', 'q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
-# runs = ['q05_1']
+#runs = ['q05_1', 'q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
+runs = ['q05_1']
 # runs = ['q05_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
 # runs = ['q05_1', 'q07_1', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
 # runs = ['q10_3', 'q10_4']
@@ -102,8 +102,8 @@ NaN = -999
 ###############################################################################
 # setup working directory and DEM's name
 home_dir = os.getcwd()
-out_dir = os.path.join(home_dir, 'output')
-plot_out_dir = os.path.join(home_dir, 'plot')
+out_dir = os.path.join(home_dir, 'outputs')
+plot_out_dir = os.path.join(home_dir, 'plots')
 
 # Create folders
 if not(os.path.exists(out_dir)):
@@ -114,7 +114,7 @@ if not(os.path.exists(plot_out_dir)):
 
 
 
-run_dir = os.path.join(home_dir, 'surveys')
+run_dir = os.path.join(home_dir, 'input_data', 'surveys')
 
 
 
@@ -167,12 +167,12 @@ for run in RUNS:
     print('######')
     print()
     # setup working directory and DEM's name
-    DoDs_dir = os.path.join(home_dir, 'output','DoDs')
-    input_dir = os.path.join(home_dir, 'surveys', run)
-    report_dir = os.path.join(home_dir, 'output', 'report_'+run)
-    plot_dir = os.path.join(home_dir, 'plot', run)
-    path_out = os.path.join(home_dir, 'output', 'DoDs', 'DoDs_'+run) # path where to save DoDs
-    DoDs_plot = os.path.join(home_dir, 'output', 'DoDs', 'DoDs_maps', run)
+    DoDs_dir = os.path.join(home_dir, 'outputs','DoDs')
+    input_dir = os.path.join(home_dir, 'input_data', 'surveys', run)
+    report_dir = os.path.join(home_dir, 'outputs', 'reports', run)
+    plot_dir = os.path.join(home_dir,  'outputs', 'plots', run)
+    path_out = os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_'+run) # path where to save DoDs
+    DoDs_plot = os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run)
     
     # Save a report with xData as real time in minutes and the value of scour and deposition volumes for each runs
     # Check if the file already exists
@@ -183,9 +183,9 @@ for run in RUNS:
 
     # CREATE FOLDERS
     if not(os.path.exists(report_dir)):
-        os.mkdir(report_dir)
+        os.makedirs(report_dir)
     if not(os.path.exists(DoDs_dir)):
-        os.mkdir(DoDs_dir)
+        os.makedirs(DoDs_dir)
     if os.path.exists(os.path.join(DoDs_dir, 'DoDs_'+run)): # If the directory exist, remove it to clean all the old data
         shutil.rmtree(os.path.join(DoDs_dir, 'DoDs_'+run), ignore_errors=False, onerror=None)
     if not(os.path.exists(os.path.join(DoDs_dir, 'DoDs_'+run))): # If the directory does not exist, create it
@@ -194,10 +194,8 @@ for run in RUNS:
         os.mkdir(os.path.join(DoDs_dir, 'DoDs_stack'))
     if not(os.path.exists(plot_dir)):
         os.mkdir(plot_dir)
-    if not(os.path.exists(os.path.join(home_dir, 'output', 'DoDs', 'DoDs_maps'))):
-        os.mkdir(os.path.join(home_dir, 'output', 'DoDs', 'DoDs_maps'))
-    if not(os.path.exists(os.path.join(home_dir, 'output', 'DoDs', 'DoDs_maps', run))):
-        os.mkdir(os.path.join(home_dir, 'output', 'DoDs', 'DoDs_maps', run))
+    if not(os.path.exists(os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run))):
+        os.makedirs(os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run))
 
 
 
@@ -206,7 +204,7 @@ for run in RUNS:
     # Parameters.txt structure:
     # discharge [l/s],repetition,run time [min],Texner discretization [-], Channel width [m], slope [m/m]
     # Load parameter matrix:
-    parameters = np.loadtxt(os.path.join(home_dir, 'parameters.txt'),
+    parameters = np.loadtxt(os.path.join(home_dir,  'input_data',  'parameters.txt'),
                             delimiter=',',
                             skiprows=1)
     # Extract run parameter depending by run name
@@ -296,10 +294,10 @@ for run in RUNS:
     # Different mask will be applied depending on the run due to different ScanArea
     # used during the laser surveys
     runs_list = ['q10_1', 'q10_2', 'q15_1', 'q20_1', 'q20_2'] # Old runs with old ScanArea
-    array_mask_name, array_mask_path = 'array_mask.txt', home_dir # Mask for runs 07 onwards
+    array_mask_name, array_mask_path = 'array_mask.txt', os.path.join(home_dir, 'input_data', 'masks') # Mask for runs 07 onwards
 
     if run in runs_list:
-        array_mask_name, array_mask_path = 'array_mask_0.txt', home_dir
+        array_mask_name, array_mask_path = 'array_mask_0.txt', os.path.join(home_dir, 'input_data', 'masks')
         print(array_mask_name)
 
 
@@ -518,7 +516,7 @@ for run in RUNS:
             plt.legend()
             # plt.savefig(os.path.join(DoDs_plot, DoD_name + 'plot.png'), dpi=600 )
             plt.savefig(os.path.join(DoDs_plot, DoD_name + 'section_plot.pdf'), dpi=600 )
-            plt.show()
+            #plt.show()
             
             
             # 3- PERFORM ISOLATED PIXEL REMOVAL:
@@ -980,8 +978,8 @@ for run in RUNS:
                 w_DoD_mean = f_DoD_mean.read()
             with open(os.path.join(path_out, DoD_name + 'filt_isol_gis.txt')) as f_DoD_isol:
                 w_DoD_isol = f_DoD_isol.read()
-            # with open(os.path.join(path_out, DoD_name + 'filt_nature_gis.txt')) as f_DoD_nature:
-            #     w_DoD_nature = f_DoD_nature.read()
+            with open(os.path.join(path_out, DoD_name + 'filt_nature_gis.txt')) as f_DoD_nature:
+                 w_DoD_nature = f_DoD_nature.read()
             with open(os.path.join(path_out, DoD_name + 'filt_fill_gis.txt')) as f_DoD_fill:
                 w_DoD_fill = f_DoD_fill.read()
             with open(os.path.join(path_out, DoD_name + 'filt_isol2_gis.txt')) as f_DoD_isol2:
@@ -999,7 +997,7 @@ for run in RUNS:
                 DoD_raw_gis = w_header + w_DoD_raw
                 DoD_mean_gis = w_header + w_DoD_mean
                 DoD_isol_gis = w_header + w_DoD_isol
-                # DoD_nature_gis = w_header + w_DoD_nature
+                DoD_nature_gis = w_header + w_DoD_nature
                 DoD_fill_gis = w_header + w_DoD_fill
                 DoD_isol2_gis = w_header + w_DoD_isol2
                 DoD_ult_gis = w_header + w_DoD_ult
@@ -1013,8 +1011,8 @@ for run in RUNS:
                 fp.write(DoD_mean_gis)
             with open(os.path.join(path_out, DoD_name + 'filt_isol_gis.txt'), 'w') as fp:
                 fp.write(DoD_isol_gis)
-            # with open(os.path.join(path_out, DoD_name + 'filt_nature_gis.txt'), 'w') as fp:
-            #     fp.write(DoD_nature_gis)
+            with open(os.path.join(path_out, DoD_name + 'filt_nature_gis.txt'), 'w') as fp:
+                fp.write(DoD_nature_gis)
             with open(os.path.join(path_out, DoD_name + 'filt_fill_gis.txt'), 'w') as fp:
                 fp.write(DoD_fill_gis)
             with open(os.path.join(path_out, DoD_name + 'filt_isol2_gis.txt'), 'w') as fp:
