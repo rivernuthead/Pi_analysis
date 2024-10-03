@@ -32,30 +32,35 @@ folder_home = os.getcwd() # Setup home folder
 
 # run_names = ['q07r1']
 
-run_names = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
+#run_names = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
 # run_names = ['q07rgm4']
 
 # run_names = ['q07rgm', 'q10rgm2', 'q15rgm2', 'q20rgm2']
 
-# run_names = ['q07r1','q07r2','q07r3','q07r4','q07r5','q07r6','q07r7','q07r8','q07r9']
+#run_names = ['q07r1','q07r2','q07r3','q07r4','q07r5','q07r6','q07r7','q07r8','q07r9']
+#run_names  = ['q10r1','q10r2','q10r3','q10r4','q10r5','q10r6','q10r7','q10r8','q10r9']
+#run_names  = ['q15r1','q15r2','q15r3','q15r4','q15r5','q15r6','q15r7','q15r8','q15r9']
+#run_names = ['q20r1','q20r2','q20r3','q20r4','q20r5','q20r6','q20r7','q20r8','q20r9']
 
+#run_names = ['q05_1','q07_1','q10_2','q20_2']
 
-# runs = ['q20rgm2']
+run_names  = ['q10_2']
 # runs = ['q15rgm2']
 # runs = ['q07rgm']
 
 
 # ANALYSIS PARAMETERS --------------------------------------------------------#
 analysis_list = ['envelope_timescale']
+stack_type = 'single_run_merged' # or 'run_envelop'
 
 # SCRIPT MODE ----------------------------------------------------------------#
-plt_show = 1
+plt_show = 0
 
 # SCRIPT PARAMETERS ----------------------------------------------------------#
 downsampling_dim = 5
 
 # EXNER TIME ------------------------------------------------------------------
-Txnr_array = [20, 30, 48, 74, 100]
+Txnr_array = [20, 30, 48, 74, 109]
 
 # RUN TIME --------------------------------------------------------------------
 run_time_array = [16, 21, 28, 47, 81]  # Run duration in minutes
@@ -66,22 +71,23 @@ run_frames = [10, 15, 20, 40, 88]  # Run duration in number of frames
 # EXNER TIME -----------------------------------------------------------------#
 # env_tscale_array = [5,5,5,5]
 # env_tscale_array = [1,1,1,1]
-env_tscale_array = [2,3,4,9,20]      #1/4 of the frame number (~1/8*Txnr)
-# env_tscale_array = [3,4,6,9]        # 1/8 Txnr
+#env_tscale_array = [2,3,4,9,20]      #1/4 of the frame number (~1/8*Txnr)
+#env_tscale_array = [3,4,6,9,13]        # 1/8 Txnr
 # env_tscale_array = [5,7,12,18]      # 1/4 Txnr
-# env_tscale_array = [10,15,24,37]    # 1/2 Txnr
+#env_tscale_array = [10,15,26,37,54]    # 1/2 Txnr
 # env_tscale_array = [15,22,36,55]    # 3/4 Txnr
-# env_tscale_array = [20,30,48,74]    # 1 Txnr
+#env_tscale_array = [20,30,48,74, 109]    # 1 Txnr
 # env_tscale_array = [25,37,60,92]    #5/4 Txnr
-# env_tscale_array = [30,45,72,110]   #6/4 Txnr
+#env_tscale_array = [30,45,72,110, 163]   #6/4 Txnr
 # env_tscale_array = [35,52,84,129]   #7/4 Txnr
-# env_tscale_array = [40,59,96,147]
+#env_tscale_array = [40,59,96,147, 218] # 2 Txnr
 # env_tscale_array = [46, 67, 108, 166]
 # env_tscale_array = [51,74,120,184]
 # env_tscale_array = [56,82,132,202]
 # env_tscale_array = [61,89,144,221]
 # env_tscale_array = [66,97,156,239]
-
+env_tscale_array = [80,120,179,296,436] #4 Txnr
+#env_tscale_array = [89,135,180,333, 490] #4.5 Txnr
 
 # =============================================================================
 # LOOP OVER THE RUNS
@@ -155,13 +161,13 @@ for run_name in run_names:
     tscale_counter = 1
      
     # SETUP DATA FOLDER
-    diff_path_out = os.path.join(folder_home, 'Maps')
+    path_input_data = os.path.join(folder_home, 'outputs')
 
-    path_folder_stacks = os.path.join(folder_home, 'activity_stack/activity_stack_cleaned')
+    path_folder_stacks = os.path.join(path_input_data, '3_PiQs_BAW_2Dt_filter',set_name)
     path_folder_envelopes = os.path.join(path_folder_stacks,'envelopes_cleaned','space_discr_' + str(downsampling_dim), run_name)
     path_partial_envelopes = os.path.join(path_folder_envelopes, run_name + '_envTscale' + str(env_tscale)) # Path where to stock the envelopes taken at a given timescale
     if not(os.path.exists(path_folder_envelopes)):
-        os.mkdir(path_folder_envelopes)
+        os.makedirs(path_folder_envelopes)
     if not(os.path.exists(path_partial_envelopes)):
         os.mkdir(path_partial_envelopes)
     if not(os.path.exists(path_partial_envelopes)):
@@ -169,23 +175,13 @@ for run_name in run_names:
     
 
     meanBAW_array=[]
-    
-    # DEFINE THE FOLDER WHERE THE BAA MAPS ARE STORED
-    BAA_maps_path = os.path.join(diff_path_out, run_name)
 
-    # CREATE THE FILE NAME LIST OF ALL THE FILES IN THE FOLDER
-    BAA_maps_folder_names = sorted(os.listdir(BAA_maps_path))
-    BAA_maps_names = []
-    
-    # CREATE A LIST OF THE NUMPY ARRAY OF THE BAA MAPS
-    for name in BAA_maps_folder_names:
-        if name.endswith('_ultimate_map.npy'):
-            BAA_maps_names = np.append(BAA_maps_names, name)
-        else:
-            pass
     
     # LOAD THE TOTAL LOW RESOLUTION STACK
-    stack_path = os.path.join(path_folder_stacks, run_name + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
+    if stack_type == 'single_run_merged':
+        stack_path = os.path.join(path_folder_stacks, set_name + '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
+    else:
+        stack_path = os.path.join(path_folder_stacks, run_name + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
     
     # LOAD THE DATA STACK
     stack = np.load(stack_path)
@@ -311,6 +307,12 @@ for run_name in run_names:
     np.savetxt(os.path.join(path_partial_envelopes, run_name + '_' + str(env_tscale) + '_meanBAW.txt'), np.around(meanBAW_array, decimals=2))
     print(np.round(np.nanmean(meanBAW_array), decimals=3))
     print(np.round(np.nanstd(meanBAW_array), decimals=3))
+
+    # Save the mean and std of all the partialBAA
+    mean = np.round(np.mean(meanBAW_array), decimals=3)
+    std = np.round(np.std(meanBAW_array), decimals=3)
+    mean_std_stack = [mean, std]
+    np.savetxt(os.path.join(path_partial_envelopes, run_name + '_envT' + str(env_tscale) + '_mean_std_BAW_allenv.txt'), mean_std_stack)
     
 
 
