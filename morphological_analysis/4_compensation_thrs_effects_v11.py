@@ -28,26 +28,29 @@ set_names = ['q07_1', 'q10_2', 'q15_3', 'q20_2']
 # set_names = ['q07_1', 'q10_2', 'q10_3', 'q10_4','q15_2', 'q15_3', 'q20_2']
 # set_names = ['q10_3', 'q10_4']
 
-set_names = ['q05_1']
+# set_names = ['q05_1']
 # set_names = ['q07_1']
 # set_names = ['q10_2']
 # set_names = ['q15_2']
 # set_names = ['q15_3']
 # set_names = ['q20_2']
 
+home_dir = os.path.join(os.getcwd(), 'morphological_analysis') # Home directory
+output_dir = os.path.join(home_dir, 'output_data','comp_thrs_analysis')
+if not(os.path.exists(output_dir)):
+        os.mkdir(output_dir)
+report_dir = os.path.join(home_dir, 'output_data', 'report')
 
 # INITIALIZE THE FIGURE -------------------------------------------------------
 for set_name in set_names:
     # FOLDER SETUP ------------------------------------------------------------
-    home_dir = os.getcwd() # Home directory
-    report_dir = os.path.join(home_dir, 'output', 'report_' + set_name)
-    output_dir = os.path.join(report_dir,'comp_thrs_analysis')
+    
+    report_dir = os.path.join(report_dir, 'report_' + set_name)
+    if not(os.path.exists(report_dir)):
+        os.mkdir(report_dir)
     set_name_dir = os.path.join(home_dir, 'surveys')
-    DoDs_folder = os.path.join(home_dir, 'report', 'DoDs', 'DoDs_stack') # Input folder
-    
-    if not(os.path.exists(output_dir)):
-        os.mkdir(output_dir)
-    
+    DoDs_folder = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_stack') # Input folder
+
     print(set_name, ' is running...')
     print()
     
@@ -69,7 +72,7 @@ for set_name in set_names:
         Txnr = 20
 
     # IMPORT STACK ------------------------------------------------------------
-    stack_dir = os.path.join(home_dir, 'output', 'DoDs', 'DoDs_stack') # Define the stack directory
+    stack_dir = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_stack') # Define the stack directory
     stack=np.load(os.path.join(stack_dir, 'DoD_stack_'+set_name+'.npy')) # Load the stack
     stack_bool=np.load(os.path.join(stack_dir, 'DoD_stack_bool_'+set_name+'.npy'))
     
