@@ -69,8 +69,8 @@ plot_mode = [
 # SINGLE RUN NAME
 # run = 'q20r9'
 # ARRAY OF RUNS
-runs = ['q05_1', 'q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
-# runs = ['q05_1']
+# runs = ['q05_1', 'q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
+runs = ['q05_1']
 # runs = ['q05_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
 # runs = ['q05_1', 'q07_1', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
 # runs = ['q10_3', 'q10_4']
@@ -104,9 +104,9 @@ NaN = -999
 # SETUP FOLDERS and RUNS
 ###############################################################################
 # setup working directory and DEM's name
-home_dir = os.getcwd()
-out_dir = os.path.join(home_dir, 'outputs')
-plot_out_dir = os.path.join(out_dir, 'plots')
+home_dir = os.path.join(os.getcwd(), 'morphological_analysis')
+out_dir = os.path.join(home_dir, 'output_data')
+plot_out_dir = os.path.join(home_dir, 'plots')
 
 # Create folders
 if not(os.path.exists(out_dir)):
@@ -114,40 +114,24 @@ if not(os.path.exists(out_dir)):
 if not(os.path.exists(plot_out_dir)):
     os.mkdir(plot_out_dir)
     
-
-
-
 run_dir = os.path.join(home_dir, 'input_data', 'surveys')
 
 
-
-# Create the run name list
-RUNS=[]
-if run_mode==0:
-    RUNS=runs
-elif run_mode==2: # batch run mode
-    for RUN in sorted(os.listdir(run_dir)): # loop over surveys directories
-        if RUN.startswith('q'): # Consider only folder names starting wit q
-            RUNS = np.append(RUNS, RUN) # Append run name at RUNS array
-elif run_mode==1: # Single run mode
-    RUNS=run.split() # RUNS as a single entry array, provided by run variable
-
-#%%
 ###############################################################################
 # INITIALIZE OVERALL REPORT ARRAYS
 ###############################################################################
 
 # Define volume time scale report matrix:
 # B_dep, SD(B_dep), B_sco, SD(B_sco)
-volume_temp_scale_report=np.zeros((len(RUNS), 4))
+volume_temp_scale_report=np.zeros((len(runs), 4))
 
 # Define morphW time scale report matrix:
 # B_morphW [min], SD(B_morphW)
-morphW_temp_scale_report = np.zeros((len(RUNS), 2))
+morphW_temp_scale_report = np.zeros((len(runs), 2))
 
 # # Define Engelund Gauss model report matrix:
 # # D [m], Q [m^3/s], Wwet/W [-]
-# engelund_model_report=np.zeros((len(RUNS),3))
+# engelund_model_report=np.zeros((len(runs),3))
 
 # Array that collect all the morphWact_array dimension.
 # It will be used to create the morphWact_matrix
@@ -160,7 +144,7 @@ DoD_length_array=[] # DoD length array
 ###############################################################################
 # MAIN LOOP OVER RUNS
 ###############################################################################
-for run in RUNS:
+for run in runs:
 
     ###########################################################################
     # SETUP FOLDERS
@@ -170,23 +154,13 @@ for run in RUNS:
     print('######')
     print()
     # setup working directory and DEM's name
-    DoDs_dir = os.path.join(home_dir, 'outputs','DoDs')
+    DoDs_dir = os.path.join(home_dir, 'output_data','DoDs')
     input_dir = os.path.join(home_dir, 'input_data', 'surveys', run)
-    report_dir = os.path.join(home_dir, 'outputs', 'reports', run)
-    plot_dir = os.path.join(home_dir, 'outputs', 'plots', run)
-    path_out = os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_'+run) # path where to save DoDs
-    DoDs_plot = os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run)
-    
-    # Save a report with xData as real time in minutes and the value of scour and deposition volumes for each runs
-    # Check if the file already exists
-    if os.path.exists(os.path.join(report_dir, 'volume_over_time.txt')):
-        os.remove(os.path.join(report_dir, 'volume_over_time.txt'))
-    else:
-        pass
+    path_out = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_'+run) # path where to save DoDs
+    DoDs_plot = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_maps', run)
+
 
     # CREATE FOLDERS
-    if not(os.path.exists(report_dir)):
-        os.makedirs(report_dir)
     if not(os.path.exists(DoDs_dir)):
         os.makedirs(DoDs_dir)
     if os.path.exists(os.path.join(DoDs_dir, 'DoDs_'+run)): # If the directory exist, remove it to clean all the old data
@@ -195,13 +169,9 @@ for run in RUNS:
         os.mkdir(os.path.join(DoDs_dir, 'DoDs_'+run))
     if not(os.path.exists(os.path.join(DoDs_dir, 'DoDs_stack'))):
         os.mkdir(os.path.join(DoDs_dir, 'DoDs_stack'))
-    if not(os.path.exists(plot_dir)):
-        os.mkdir(plot_dir)
-    if not(os.path.exists(os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run))):
-        os.makedirs(os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_maps', run))
-
-
-
+    
+    if not(os.path.exists(os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_maps', run))):
+        os.makedirs(os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_maps', run))
     # IMPORT RUN PARAMETERS from file parameters.txt
     # variable run must be as 'q' + discharge + '_' repetition number
     # Parameters.txt structure:

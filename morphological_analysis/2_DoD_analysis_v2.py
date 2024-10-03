@@ -15,10 +15,6 @@ import matplotlib.pyplot as plt
 from morph_quantities_func_v2 import morph_quantities
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-###############################################################################
-# TODO
-###############################################################################
-# 1. 
 
 start = time.time() # Set initial time
 
@@ -46,9 +42,9 @@ process_mode = 1
 # SINGLE RUN NAME
 run = 'q15_2'
 # ARRAY OF RUNS
-# runs = ['q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
+runs = ['q07_1', 'q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
 # runs = ['q05_1', 'q07_1', 'q10_2', 'q15_2', 'q20_2']
-runs = ['q05_1']
+# runs = ['q05_1']
 # runs = ['q10_3', 'q10_4']
 # runs = ['q10_2']
 
@@ -69,9 +65,9 @@ NaN = -999
 # SETUP FOLDERS and RUNS
 ###############################################################################
 # setup working directory and DEM's name
-home_dir = os.getcwd()
-out_dir = os.path.join(home_dir, 'output')
-plot_out_dir = os.path.join(home_dir, 'plot')
+home_dir = os.path.join(os.getcwd(), 'morphological_analysis')
+out_dir = os.path.join(home_dir, 'output_data')
+plot_out_dir = os.path.join(home_dir, 'plots')
 
 # Create folders
 if not(os.path.exists(out_dir)):
@@ -79,22 +75,10 @@ if not(os.path.exists(out_dir)):
 if not(os.path.exists(plot_out_dir)):
     os.mkdir(plot_out_dir)
     
-DoDs_dir = os.path.join(home_dir, 'output', 'DoDs')
+DoDs_dir = os.path.join(home_dir, 'output_data', 'DoDs')
 
-run_dir = os.path.join(home_dir, 'surveys')
+run_dir = os.path.join(home_dir, 'input_data', 'surveys')
 
-
-
-# Create the run name list
-RUNS=[]
-if run_mode==0:
-    RUNS=runs
-elif run_mode==2: # batch run mode
-    for RUN in sorted(os.listdir(run_dir)): # loop over surveys directories
-        if RUN.startswith('q'): # Consider only folder names starting wit q
-            RUNS = np.append(RUNS, RUN) # Append run name at RUNS array
-elif run_mode==1: # Single run mode
-    RUNS=run.split() # RUNS as a single entry array, provided by run variable
 
 #%%
 ###############################################################################
@@ -103,15 +87,15 @@ elif run_mode==1: # Single run mode
 
 # Define volume time scale report matrix:
 # B_dep, SD(B_dep), B_sco, SD(B_sco)
-volume_temp_scale_report=np.zeros((len(RUNS), 4))
+volume_temp_scale_report=np.zeros((len(run), 4))
 
 # Define morphW time scale report matrix:
 # B_morphW [min], SD(B_morphW)
-morphW_temp_scale_report = np.zeros((len(RUNS), 2))
+morphW_temp_scale_report = np.zeros((len(run), 2))
 
 # # Define Engelund Gauss model report matrix:
 # # D [m], Q [m^3/s], Wwet/W [-]
-# engelund_model_report=np.zeros((len(RUNS),3))
+# engelund_model_report=np.zeros((len(run),3))
 
 # Array that collect all the morphWact_array dimension.
 # It will be used to create the morphWact_matrix
@@ -123,7 +107,7 @@ DoD_length_array=[] # DoD length array
 ###############################################################################
 # MAIN LOOP OVER RUNS
 ###############################################################################
-for run in RUNS:
+for run in runs:
 
     ###########################################################################
     # SETUP FOLDERS
@@ -133,9 +117,9 @@ for run in RUNS:
     print('######')
     print()
     # setup working directory and DEM's name
-    input_dir = os.path.join(home_dir,'output', 'DoDs', 'DoDs_' + run)
-    report_dir = os.path.join(home_dir, 'output', run)
-    plot_dir = os.path.join(home_dir, 'plot', run)
+    input_dir = os.path.join(home_dir,'output_data', 'DoDs', 'DoDs_' + run)
+    report_dir = os.path.join(home_dir, 'output_data', run)
+    plot_dir = os.path.join(home_dir, 'plots', run)
     
     # Save a report with xData as real time in minutes and the value of scour and deposition volumes for each runs
     # Check if the file already exists
@@ -160,7 +144,7 @@ for run in RUNS:
     # Parameters.txt structure:
     # discharge [l/s],repetition,run time [min],Texner discretization [-], Channel width [m], slope [m/m]
     # Load parameter matrix:
-    parameters = np.loadtxt(os.path.join(home_dir, 'parameters.txt'),
+    parameters = np.loadtxt(os.path.join(home_dir,'input_data', 'parameters.txt'),
                             delimiter=',',
                             skiprows=1)
     # Extract run parameter depending by run name

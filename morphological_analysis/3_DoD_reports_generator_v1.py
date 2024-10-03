@@ -43,13 +43,21 @@ import os
 import numpy as np
 
 set_names = ['q05_1','q07_1','q10_2', 'q10_3', 'q10_4', 'q15_2', 'q15_3', 'q20_2']
-set_names = ['q05_1']
+# set_names = ['q05_1']
+
+home_dir = os.path.join(os.getcwd(), 'morphological_analysis') # Home directory
+DoDs_folder = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_stack') # Input folder
+report_folder = os.path.join(home_dir, 'output_data', 'report')
+if not(os.path.exists(report_folder)):
+    os.mkdir(report_folder)
 
 for set_name in set_names:
     print(set_name, ' is running...')
+
+    report_path = os.path.join(report_folder,'report_'+set_name)
+    if not(os.path.exists(report_path)):
+        os.mkdir(report_path)
     # IMPORT DoD STACK AND DoD BOOL STACK
-    home_dir = os.getcwd() # Home directory
-    DoDs_folder = os.path.join(home_dir, 'output', 'DoDs', 'DoDs_stack') # Input folder
     stack_name = 'DoD_stack' + '_' + set_name + '.npy' # Define stack name
     stack_bool_name = 'DoD_stack' + '_bool_' + set_name + '.npy' # Define stack bool name
     stack_path = os.path.join(DoDs_folder,stack_name) # Define stack path
@@ -77,7 +85,7 @@ for set_name in set_names:
     '''
     report_net_volume = np.nansum(stack, axis=2)
     report_net_volume = np.nansum(report_net_volume, axis=1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_net_volume.txt'), report_net_volume, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_net_volume.txt'), report_net_volume, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE SCOUR VOLUME
@@ -85,7 +93,7 @@ for set_name in set_names:
     stack_scour_volume = np.where(stack<0, stack, 0)
     report_scour_volume = np.nansum(stack_scour_volume, axis=2)
     report_scour_volume = np.nansum(report_scour_volume, axis=1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_scour_volume.txt'), report_scour_volume, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_scour_volume.txt'), report_scour_volume, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE FILL VOLUME
@@ -93,7 +101,7 @@ for set_name in set_names:
     stack_fill_volume = np.where(stack>0, stack, 0)
     report_fill_volume = np.nansum(stack_fill_volume, axis=2)
     report_fill_volume = np.nansum(report_fill_volume, axis=1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_fill_volume.txt'), report_fill_volume, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_fill_volume.txt'), report_fill_volume, delimiter=',', fmt = "%.4f")
     
     
     '''
@@ -103,7 +111,7 @@ for set_name in set_names:
     report_MAW = np.nansum(stack_act, axis=2)
     report_MAW = np.nansum(report_MAW, axis=1)
     report_MAW = report_MAW/stack.shape[2]/120
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_MAW.txt'), report_MAW, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_MAW.txt'), report_MAW, delimiter=',', fmt = "%.4f")
     
     
     '''
@@ -113,7 +121,7 @@ for set_name in set_names:
     report_sco_MAW = np.nansum(stack_sco_act, axis=2)
     report_sco_MAW = np.nansum(report_sco_MAW, axis=1)
     report_sco_MAW = report_sco_MAW/stack.shape[2]/120
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_sco_MAW.txt'), report_sco_MAW, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_sco_MAW.txt'), report_sco_MAW, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE FILL MORPHOLOGICAL ACTIVE WIDTH
@@ -122,7 +130,7 @@ for set_name in set_names:
     report_dep_MAW = np.nansum(stack_dep_act, axis=2)
     report_dep_MAW = np.nansum(report_dep_MAW, axis=1)
     report_dep_MAW = report_dep_MAW/stack.shape[2]/120
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_fill_MAW.txt'), report_dep_MAW, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_fill_MAW.txt'), report_dep_MAW, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE AVERAGE ACTIVE THICKNESS
@@ -131,7 +139,7 @@ for set_name in set_names:
     stack_thickness = np.where(stack_thickness==0, np.nan, stack_thickness)
     report_MAT = np.nanmean(stack_thickness, axis = 2)
     report_MAT = np.nanmean(report_MAT, axis = 1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_MAT.txt'), report_MAT, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_MAT.txt'), report_MAT, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE SCOUR AVERAGE ACTIVE THICKNESS
@@ -140,7 +148,7 @@ for set_name in set_names:
     stack_sco_thickness = np.where(stack_sco_thickness==0, np.nan, stack_sco_thickness)
     report_sco_MAT = np.nanmean(stack_sco_thickness, axis = 2)
     report_sco_MAT = np.nanmean(report_sco_MAT, axis = 1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_sco_MAT.txt'), report_sco_MAT, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_sco_MAT.txt'), report_sco_MAT, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE FILL AVERAGE ACTIVE THICKNESS
@@ -149,11 +157,11 @@ for set_name in set_names:
     stack_dep_thickness = np.where(stack_dep_thickness==0, np.nan, stack_dep_thickness)
     report_dep_MAT = np.nanmean(stack_dep_thickness, axis = 2)
     report_dep_MAT = np.nanmean(report_dep_MAT, axis = 1)
-    np.savetxt(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_fill_MAT.txt'), report_dep_MAT, delimiter=',', fmt = "%.4f")
+    np.savetxt(os.path.join(report_folder,'report_'+set_name, set_name + '_fill_MAT.txt'), report_dep_MAT, delimiter=',', fmt = "%.4f")
     
     '''
     COMPUTE THE NEW ACTIVATED AREA FOR EACH DoD
     '''
     # 1=activated, -1=deactivated, 0=no_changes
     stack_diff = stack_act[1:,:,:,:] - stack_act[:-1,:,:,:]
-    np.save(os.path.join(home_dir, 'output','report_'+set_name, set_name + '_diff_stack.npy'),stack_diff)
+    np.save(os.path.join(report_folder,'report_'+set_name, set_name + '_diff_stack.npy'),stack_diff)
