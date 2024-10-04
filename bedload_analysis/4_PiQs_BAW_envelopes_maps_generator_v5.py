@@ -44,14 +44,13 @@ folder_home = os.getcwd() # Setup home folder
 
 #run_names = ['q05_1','q07_1','q10_2','q20_2']
 
-run_names  = ['q15_2']
+run_names  = ['q05rgm5']
 # runs = ['q15rgm2']
 # runs = ['q07rgm']
 
 
 # ANALYSIS PARAMETERS --------------------------------------------------------#
 analysis_list = ['envelope_timescale']
-stack_type = 'single_run_merged' # or 'run_envelop'
 
 # SCRIPT MODE ----------------------------------------------------------------#
 plt_show = 0
@@ -102,7 +101,7 @@ for run_name in run_names:
         run_time = run_time_array[4]
         run_frm = run_frames[4]
         set_name = 'q05_1'
-        rgm_code = 'q05rgm'
+        rgm_code = 'q05rgm5'
         rgm_skip_frame = 0
         MAW_set_name = 'q05_1'
 
@@ -178,10 +177,7 @@ for run_name in run_names:
 
     
     # LOAD THE TOTAL LOW RESOLUTION STACK
-    if stack_type == 'single_run_merged':
-        stack_path = os.path.join(path_folder_stacks, set_name + '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
-    else:
-        stack_path = os.path.join(path_folder_stacks, run_name + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
+    stack_path = os.path.join(path_folder_stacks, run_name + '_BAA_stack_LR' + str(downsampling_dim) + '_cld.npy')
     
     # LOAD THE DATA STACK
     stack = np.load(stack_path)
