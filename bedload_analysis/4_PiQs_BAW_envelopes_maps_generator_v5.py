@@ -44,7 +44,7 @@ folder_home = os.getcwd() # Setup home folder
 
 #run_names = ['q05_1','q07_1','q10_2','q20_2']
 
-run_names  = ['q10_2']
+run_names  = ['q15_2']
 # runs = ['q15rgm2']
 # runs = ['q07rgm']
 
@@ -161,7 +161,7 @@ for run_name in run_names:
     tscale_counter = 1
      
     # SETUP DATA FOLDER
-    path_input_data = os.path.join(folder_home, 'outputs')
+    path_input_data = os.path.join(folder_home, 'output_data')
 
     path_folder_stacks = os.path.join(path_input_data, '3_PiQs_BAW_2Dt_filter',set_name)
     path_folder_envelopes = os.path.join(path_folder_stacks,'envelopes_cleaned','space_discr_' + str(downsampling_dim), run_name)

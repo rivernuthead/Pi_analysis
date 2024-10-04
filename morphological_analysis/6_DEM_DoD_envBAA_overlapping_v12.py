@@ -23,6 +23,11 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import tifffile as tiff 
 
+#==============================================================================
+# OPTION
+#==============================================================================
+DoS_map_overlap = 0 # if 1 also overlap the envelop map of the mean Difference of saturation.
+
 # =============================================================================
 # FUNCTIONS
 # =============================================================================
@@ -94,20 +99,19 @@ run_mode.
 '''
 
 home_dir = os.getcwd() # Home directory
-report_dir = os.path.join(home_dir, 'outputs')
+report_dir = os.path.join(home_dir, 'output_data')
 output_folder = os.path.join(report_dir,'DEM_DoD_envBAA_overlapping')
 run_dir = os.path.join(home_dir, 'input_data','surveys')
 PiQs_dir = os.path.join(home_dir, '..','bedload_analysis')
-stack_dir = os.path.join(home_dir, 'outputs', 'DoDs', 'DoDs_stack_thrs_1.3')
+stack_dir = os.path.join(home_dir, 'output_data', 'DoDs', 'DoDs_stack')
 
 if not(os.path.exists(output_folder)):
     os.mkdir(output_folder)
 
 
-run_names = ['q05r1', 'q05r2', 'q05r3', 'q05r4', 'q05r5', 'q05r6', 'q05r7', 'q05r8', 'q05r9']
+#run_names = ['q05r1', 'q05r2', 'q05r3', 'q05r4', 'q05r5', 'q05r6', 'q05r7', 'q05r8', 'q05r9']
 
-# run_names = ['q07r1', 'q07r2', 'q07r3', 'q07r4', 'q07r5', 'q07r6', 'q07r7', 'q07r8', 'q07r9']
-
+run_names = ['q07r1', 'q07r2', 'q07r3', 'q07r4', 'q07r5', 'q07r6', 'q07r7', 'q07r8', 'q07r9']
 # run_names = ['q10r1', 'q10r2', 'q10r3', 'q10r4', 'q10r5', 'q10r6', 'q10r7', 'q10r8', 'q10r9']
 
 # # run_names = ['q15r1', 'q15r2', 'q15r3', 'q15r4', 'q15r5', 'q15r6', 'q15r7', 'q15r8', 'q15r9']
@@ -199,10 +203,10 @@ for run_name in run_names:
         print('Script mode: Full stack')
         #                                        '/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/activity_stack/q05r1_envBAA_act_period_LR5.npy'
         #                                        '/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/activity_stack/q05r1_envBAA_act_period_LR5.npy'
-        envBAA_act_period = np.load(os.path.join(PiQs_dir,'outputs','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
+        envBAA_act_period = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
         envBAA_act_period = np.array(envBAA_act_period, dtype=np.uint16)
         
-        test = np.load(os.path.join(PiQs_dir,'outputs','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
+        test = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
         
         
     elif 'partial_envBAA_stack' in run_mode:
@@ -215,20 +219,25 @@ for run_name in run_names:
     
     
     # IMPORT envBAA INTENSITY MAP ---------------------------------------------
-    envBAA_intensity = np.load(os.path.join(PiQs_dir,'outputs','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_mean_intensity_LR5.npy'))
+    envBAA_intensity = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_mean_intensity_LR5.npy'))
     envBAA_intensity = np.array(envBAA_intensity, dtype=np.uint16)
     
     # IMPORT DEM MAPS ---------------------------------------------------------
     # DEM = np.loadtxt(os.path.join(run_dir, set_name, 'matrix_bed_norm_' + set_name +'s'+ str(run_names.index(run_name))+'.txt'), skiprows=8)
-    DEM_stack = np.load(os.path.join(home_dir, 'outputs', 'DEMs','DEMs_stack', set_name + '_DEM_stack.npy'))
+    DEM_stack = np.load(os.path.join(home_dir, 'output_data', 'DEMs','DEMs_stack', set_name + '_DEM_stack.npy'))
     DEM = DEM_stack[run_index-1,:,:]
     
     # IMPORT DoD MAP ----------------------------------------------------------
     # DoD = np.loadtxt(os.path.join(report_dir, 'DoDs', 'DoDs_'+ set_name,'DoD_' + str(run_names.index(run_name)+1) + '-' + str(run_names.index(run_name)) + '_filt_ult.txt'))
-    DoD_stack = np.load(os.path.join(home_dir, 'outputs','DoDs', 'DoDs_stack_thrs_1.3','DoD_stack_' + set_name + '.npy'))
+    DoD_stack = np.load(os.path.join(home_dir, 'output_data','DoDs', 'DoDs_stack','DoD_stack_' + set_name + '.npy'))
     DoD_stack = DoD_stack[:,:,:,0] # Extract timespan 1 DoDs
     DoD_stack_bool = array_to_bool(DoD_stack, 'semi-bool')
     DoD = DoD_stack[run_index-1,:,:]
+
+    # OPTIONAL: IMPORT ENV DOS MAP
+    if DoS_map_overlap == 1 :
+        envDoS_intensity = np.load(os.path.join(PiQs_dir,'output_data','3_Image_filtering_BAW_map','DoS_maps',run_name,'envelop', run_name + '_DoS_mean_map_LR5.npy'))
+        envDoS_intensity = np.array(envDoS_intensity, dtype=np.uint16)
     # -------------------------------------------------------------------------
     
     # TEMPORARY RESHAPING FOR THE q05_1 RUN -----------------------------------
@@ -251,6 +260,12 @@ for run_name in run_names:
         padding_top = np.full((pad_top, envBAA_intensity.shape[1]), 0)
         padding_bottom = np.full((pad_bottom, envBAA_intensity.shape[1]), 0)
         envBAA_intensity = np.vstack([padding_top, envBAA_intensity, padding_bottom])
+
+        if DoS_map_overlap == 1 :
+            padding_top = np.full((pad_top, envDoS_intensity.shape[1]), 0)
+            padding_bottom = np.full((pad_bottom, envDoS_intensity.shape[1]), 0)
+            envDoS_intensity = np.vstack([padding_top, envDoS_intensity, padding_bottom])
+            
     # -------------------------------------------------------------------------
     
     
@@ -279,7 +294,9 @@ for run_name in run_names:
     # RESIZE envBAA------------------------------------------------------------
     envBAA_act_period = envBAA_act_period[:,:DoD_rsz_rsc.shape[1]]
     envBAA_intensity = envBAA_intensity[:,:DoD_rsz_rsc.shape[1]]
-    
+    if DoS_map_overlap == 1 :
+        envDoS_intensity = envDoS_intensity[:,:DoD_rsz_rsc.shape[1]]
+        
     ''' Sometimes runs have different numbers of frames. This set of tscale is
     designed to investigate close to the 1/8 of Txnr. Whith this setup it may
     occurs that the envelope calculation has the number of frame that allows
@@ -329,7 +346,9 @@ for run_name in run_names:
     envBAA_intensity_rsh = img_scaling_to_DEM(envBAA_intensity, scale, dx, dy, rot_angle)
     envBAA_act_period = np.array(envBAA_act_period, dtype=np.uint16)
     envBAA_act_period_rsh = img_scaling_to_DEM(envBAA_act_period, scale, dx, dy, rot_angle)
-    
+    if DoS_map_overlap == 1 :
+        envDoS_intensity = np.array(envDoS_intensity, dtype=np.uint16)
+        envDoS_intensity = img_scaling_to_DEM(envDoS_intensity, scale, dx, dy, rot_angle)
     
     # =============================================================================
     # APPLY ACTIVITY THRESHOLD
@@ -409,7 +428,10 @@ for run_name in run_names:
     # =========================================================================
     # STACK DEM, DOD, envBAA ACTIVE PERIODS, AND envBAA ACTIVE INTENSITY
     # =========================================================================
-    DEM_DoD_envBAA_stack = np.stack([DEM_rsz_rsc, DoD_rsz_rsc, envBAA_act_period_rsh, envBAA_intensity_rsh_filt, envBAA_act_period_4th], axis=0)
+    if DoS_map_overlap == 1 :
+        DEM_DoD_envBAA_stack = np.stack([DEM_rsz_rsc, DoD_rsz_rsc, envBAA_act_period_rsh, envBAA_intensity_rsh_filt, envBAA_act_period_4th, envDoS_intensity], axis=0)
+    else:
+        DEM_DoD_envBAA_stack = np.stack([DEM_rsz_rsc, DoD_rsz_rsc, envBAA_act_period_rsh, envBAA_intensity_rsh_filt, envBAA_act_period_4th], axis=0)
     
     # CREATE AND APPLY MASK ---------------------------------------------------
     mask = np.pad(mask, ((pad_rows, 0), (pad_cols, 0)), constant_values=np.nan)
@@ -423,7 +445,10 @@ for run_name in run_names:
         os.mkdir(os.path.join(output_folder,set_name))
         
     if 'full_BAA_stack' in run_mode:
-        path = os.path.join(output_folder, set_name, set_name + '_' + run_name + '_DEM_DoD_envBAA_stack.npy')
+        if DoS_map_overlap == 1 :
+            path = os.path.join(output_folder, set_name, set_name + '_' + run_name + '_DEM_DoD_envBAA_DoS_stack.npy')
+        else:
+            path = os.path.join(output_folder, set_name, set_name + '_' + run_name + '_DEM_DoD_envBAA_stack.npy')
     elif 'partial_envBAA_stack' in run_mode:
         path = os.path.join(output_folder, set_name, set_name + '_' + run_name + '_DEM_DoD_partial_envBAA_stack.npy')
     np.save(path, DEM_DoD_envBAA_stack)
@@ -605,7 +630,7 @@ for set_name in set_names:
 
     # IMPORT STACK ------------------------------------------------------------
     # DoD maps stack
-    DoD_maps_stack    = np.load(os.path.join(home_dir, 'outputs','DoDs', 'DoDs_stack',"DoD_stack_"+set_name+".npy"))
+    DoD_maps_stack    = np.load(os.path.join(home_dir, 'output_data','DoDs', 'DoDs_stack',"DoD_stack_"+set_name+".npy"))
     # Bedlaod mean intensity maps stack
     envBAA_stack = np.load(os.path.join(report_dir, set_name + '_envBAA_intensity_1Txnr_stack.npy')) # envBAA maps envelope at 1 Exner time
     # Morphological compensation maps stack
@@ -715,7 +740,7 @@ for set_name in set_names:
                  transform=plt.gca().transAxes, ha='center', va='center', fontsize=6)
 
         # Save the plot as a PDF file
-        plt.savefig(os.path.join(home_dir, 'outputs', set_name + '_' + str(t) +
+        plt.savefig(os.path.join(home_dir, 'output_data', set_name + '_' + str(t) +
                     '_comp_thrs_DoD_envDoD_overlapping.pdf'), dpi=800, bbox_inches='tight')
 
         plt.show()
