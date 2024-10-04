@@ -38,8 +38,9 @@ from PiQs_BAW_func_v1 import *
 # runs = ['q07rgm', 'q10rgm2cut', 'q15rgm2', 'q20rgm2']
 # runs = ['q07rgm_test2', 'q10rgm2_test', 'q15rgm2_test', 'q20rgm2_test'] # TEST2 database
 # runs = ['q07r1'] # Define the run names for batch process
-runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
-
+#runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
+runs=['q05rgm5']
+set_names = ['q05_1']
 # runs = ['q07r1','q07r2','q07r3','q07r4','q07r5','q07r6','q07r7','q07r8','q07r9'
 #         ,'q10r1','q10r2','q10r3','q10r4','q10r5','q10r6','q10r7','q10r8','q10r9'
 #         ,'q15r1','q15r2','q15r3','q15r4','q15r5','q15r6','q15r7','q15r8','q15r9'
@@ -53,13 +54,13 @@ runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
 # SET MAIN FOLDERS
 folder_home = os.getcwd()
 
-for run in runs:
+for run_index, run in enumerate(runs):
     print(run)
     # Setup data folder
     path_input_data = os.path.join(folder_home, 'input_data')
     path_output_data = os.path.join(folder_home, 'output_data')
-    path_diff = os.path.join(path_input_data, '2_Differences', run[0:3], run) # Set the directory path where to pick up images
-    path_img = os.path.join(path_input_data, '1_Fused_images', run[0:3], run)
+    path_diff = os.path.join(path_input_data, '2_Differences', set_names[run_index], run) # Set the directory path where to pick up images
+    path_img = os.path.join(path_input_data, '1_Fused_images', set_names[run_index], run)
     path_blurry_area = os.path.join(path_output_data, '0_blurry_shaded_areas_detection','blurry_area_images')
     path_shaded_imgs = os.path.join(path_output_data, '0_blurry_shaded_areas_detection','shaded_area_images')
     

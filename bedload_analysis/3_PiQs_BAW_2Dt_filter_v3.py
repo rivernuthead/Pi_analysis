@@ -78,7 +78,7 @@ folder_home = os.getcwd() # Setup home folder
 # SCRIPT PARAMETERS------------------------------------------------------------
 downsampling_dim = 5
 
-for run in runs:
+for run_index, run in enumerate(runs):
 
     print('****************')
     print(run)
@@ -86,11 +86,11 @@ for run in runs:
 
     # SETUP DATA FOLDER
     path_input_data = os.path.join(folder_home, 'input_data')
-    path_output_data = os.path.join(folder_home, 'outputs')
-    path_img = os.path.join(path_input_data, '1_Fused_images',run[0:3], run)
-    path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
-    stack_dir = os.path.join(path_output_data, '2_PiQs_BAW_stacks', run[0:3], run)
-    output_path = os.path.join(path_output_data, '3_PiQs_BAW_2Dt_filter', run[0:3])
+    path_output_data = os.path.join(folder_home, 'output_data')
+    path_img = os.path.join(path_input_data, '1_Fused_images',set_names[run_index], run)
+    path_report = os.path.join(path_output_data, 'output_report',set_names[run_index], run)
+    stack_dir = os.path.join(path_output_data, '2_PiQs_BAW_stacks', set_names[run_index], run)
+    output_path = os.path.join(path_output_data, '3_PiQs_BAW_2Dt_filter', set_names[run_index])
     
     # Check if the folders already exist and create them
     if not(os.path.exists(output_path)):

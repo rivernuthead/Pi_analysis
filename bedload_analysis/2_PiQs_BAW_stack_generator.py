@@ -43,8 +43,10 @@ from PiQs_BAW_func_v1 import *
 # runs = ['q15r1']
 # runs = ['q20r9']
 # runs = ['q20r1']
+runs = ['q05rgm5']
+set_names = ['q05_1']
 
-runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
+#runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
 # runs = ['q07r1','q07r2','q07r3','q07r4','q07r5','q07r6','q07r7','q07r8','q07r9']
 # runs = ['q10r1','q10r2','q10r3','q10r4','q10r5','q10r6','q10r7','q10r8','q10r9']
 # runs = ['q15r1','q15r2','q15r3','q15r4','q15r5','q15r6','q15r7','q15r8','q15r9']
@@ -65,15 +67,15 @@ save_single_run_merged=1 # if 1: create a stack of all image of all runs
 # FOLDERS SETUP----------------------------------------------------------------
 folder_home = os.getcwd() # Setup home folder 
 
-for run in runs:
+for run_index,run in enumerate(runs):
     print('****************')
     print(run)
     print('****************')
     
-    path_output_data = os.path.join(folder_home, 'outputs')
-    path_report = os.path.join(path_output_data, 'output_report',run[0:3], run)
-    diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',run[0:3],run)
-    path_output_stack = os.path.join(path_output_data,'2_PiQs_BAW_stacks',run[0:3], run)
+    path_output_data = os.path.join(folder_home, 'output_data')
+    path_report = os.path.join(path_output_data, 'output_report',set_names[run_index], run)
+    diff_path_out = os.path.join(path_output_data, '1_PiQs_BAW_maps',set_names[run_index],run)
+    path_output_stack = os.path.join(path_output_data,'2_PiQs_BAW_stacks',set_names[run_index], run)
 
      # Check if the folders already exist and create them
     if not(os.path.exists(path_output_stack)):
