@@ -181,7 +181,7 @@ if save_single_run_merged==1:
         npy_stack = collect_and_stack_files(
             base_dir, subfolder_filter, file_filter, exclude_filter)
         
-        np.save(os.path.join(path_output_data,'2_PiQs_BAW_stacks',run[0:3], set_name +
+        np.save(os.path.join(path_output_data,'2_PiQs_BAW_stacks',set_name, set_name +
                 '_single_run_merged_BAA_stack_LR' + str(downsampling_dim) + '.npy'), npy_stack)
 
         # Print the shape of the stacked array
