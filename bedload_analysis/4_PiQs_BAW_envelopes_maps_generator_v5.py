@@ -44,7 +44,7 @@ folder_home = os.getcwd() # Setup home folder
 
 #run_names = ['q05_1','q07_1','q10_2','q20_2']
 
-run_names  = ['q05rgm5']
+run_names  = ['q07rgm','q10rgm2','q15rgm2','q20rgm2']
 # runs = ['q15rgm2']
 # runs = ['q07rgm']
 
@@ -79,13 +79,13 @@ run_frames = [10, 15, 20, 40, 88]  # Run duration in number of frames
 # env_tscale_array = [25,37,60,92]    #5/4 Txnr
 #env_tscale_array = [30,45,72,110, 163]   #6/4 Txnr
 # env_tscale_array = [35,52,84,129]   #7/4 Txnr
-#env_tscale_array = [40,59,96,147, 218] # 2 Txnr
+env_tscale_array = [40,59,96,147, 218] # 2 Txnr
 # env_tscale_array = [46, 67, 108, 166]
 # env_tscale_array = [51,74,120,184]
 # env_tscale_array = [56,82,132,202]
 # env_tscale_array = [61,89,144,221]
 # env_tscale_array = [66,97,156,239]
-env_tscale_array = [80,120,179,296,436] #4 Txnr
+#env_tscale_array = [80,120,179,296,436] #4 Txnr
 #env_tscale_array = [89,135,180,333, 490] #4.5 Txnr
 
 # =============================================================================
