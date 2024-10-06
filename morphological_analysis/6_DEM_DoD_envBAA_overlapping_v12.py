@@ -111,9 +111,9 @@ if not(os.path.exists(output_folder)):
 
 #run_names = ['q05r1', 'q05r2', 'q05r3', 'q05r4', 'q05r5', 'q05r6', 'q05r7', 'q05r8', 'q05r9']
 
-run_names = ['q07r1', 'q07r2', 'q07r3', 'q07r4', 'q07r5', 'q07r6', 'q07r7', 'q07r8', 'q07r9']
+#run_names = ['q07r1', 'q07r2', 'q07r3', 'q07r4', 'q07r5', 'q07r6', 'q07r7', 'q07r8', 'q07r9']
 # run_names = ['q10r1', 'q10r2', 'q10r3', 'q10r4', 'q10r5', 'q10r6', 'q10r7', 'q10r8', 'q10r9']
-
+run_names = ['q05r9']
 # # run_names = ['q15r1', 'q15r2', 'q15r3', 'q15r4', 'q15r5', 'q15r6', 'q15r7', 'q15r8', 'q15r9']
 
 # run_names = ['q15r1', 'q15r3', 'q15r4', 'q15r5', 'q15r6', 'q15r8', 'q15r9']
@@ -203,10 +203,10 @@ for run_name in run_names:
         print('Script mode: Full stack')
         #                                        '/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/activity_stack/q05r1_envBAA_act_period_LR5.npy'
         #                                        '/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/activity_stack/q05r1_envBAA_act_period_LR5.npy'
-        envBAA_act_period = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
+        envBAA_act_period = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',set_name, run_name, run_name + '_envBAA_act_period_LR5.npy'))
         envBAA_act_period = np.array(envBAA_act_period, dtype=np.uint16)
         
-        test = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_period_LR5.npy'))
+        test = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',set_name, run_name, run_name + '_envBAA_act_period_LR5.npy'))
         
         
     elif 'partial_envBAA_stack' in run_mode:
@@ -219,7 +219,7 @@ for run_name in run_names:
     
     
     # IMPORT envBAA INTENSITY MAP ---------------------------------------------
-    envBAA_intensity = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',run_name[0:3], run_name, run_name + '_envBAA_act_mean_intensity_LR5.npy'))
+    envBAA_intensity = np.load(os.path.join(PiQs_dir,'output_data','2_PiQs_BAW_stacks',set_name, run_name, run_name + '_envBAA_act_mean_intensity_LR5.npy'))
     envBAA_intensity = np.array(envBAA_intensity, dtype=np.uint16)
     
     # IMPORT DEM MAPS ---------------------------------------------------------
@@ -408,6 +408,8 @@ for run_name in run_names:
     DoD_plot_img.save(os.path.join(output_path, run_name + '_DoD_resized_image.tiff'))
     envBAA_plot_img = Image.fromarray(np.array(envBAA_plot*1).astype(np.uint16))
     envBAA_plot_img.save(os.path.join(output_path, run_name + '_envBAA_resized_image.tiff'))
+    envBAA_intensity_rsh_filt_img = Image.fromarray(np.array(envBAA_intensity_rsh_filt*1).astype(np.uint16))
+    envBAA_intensity_rsh_filt_img.save(os.path.join(output_path, run_name + '_envBAA_intensity_resized_image.tiff'))
     
     # =============================================================================
     # CREATE THE PLOT
