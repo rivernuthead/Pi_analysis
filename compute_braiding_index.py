@@ -1,213 +1,68 @@
 import os
+import rasterio
+from skimage import morphology
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import morphology
+import cv2
 
 ####### Functions ##################################################################################
-def read_data(file_path):
-    """
-    Reads the DEM data from a text file.
 
-    Parameters:
-    file_path (str): Path to the DEM file.
-
-    Returns:
-    tuple: A tuple containing the headers and the DEM data array.
-    """
-    with open(file_path, 'r') as f:
-        # Read the first eight lines as headers
-        headers = [next(f) for _ in range(8)]
-        # Read the rest of the data into a numpy array
-        data = np.loadtxt(f)
-        # Replace -999 values with NaN
-        data = np.where(data == -999, np.nan, data)
-    return headers, data
-
-def update_headers(headers, east_coord):
-    # Update rows and cols in headers
-    headers[2] = f"east: {east_coord}\n"
-    return headers
+def compute_braiding_index(array, step=100):
+    # Ensure the array is a NumPy array
+    array = np.array(array)
     
-def generate_elevation_array(shape, max_elevation, slope, x_res):
-    """
-    Generates a synthetic 2D array of elevation with a specified maximum elevation and slope.
-
-    Parameters:
-    shape (tuple): Shape of the array (y, x).
-    max_elevation (float): Maximum elevation value at the first x column.
-    slope (float): Slope to be applied along the x-axis.
-    x_res (float): Resolution along the x-axis.
-
-    Returns:
-    np.ndarray: 2D array of synthetic elevation values.
-    """
-    y, x = shape
-    elevation_array = np.zeros((y, x))
+    # Get the shape of the array
+    y, x = array.shape
     
-    # Create a linear gradient along the x-axis with the given resolution
-    for i in range(x):
-        elevation_array[:, i] = max_elevation - slope * i * x_res
+    # Initialize a list to store the count of changes for each column
+    nb_measurement = 0
+    for col in range(0,x,step):
+        nb_measurement = nb_measurement + 1
+
+    nb_channels = [0] * nb_measurement
+
+    # Iterate through each column
+    for i,col in enumerate(range(0,x,step)):
+        # Start with the initial condition check
+        if array[0, col] == 1:
+            nb_channels[i] += 1
+            
+        # Check for changes from 0 to 1 in the column
+        for row in range(1, y):
+            if array[row-1, col] == 0 and array[row, col] == 1:
+                nb_channels[i] += 1
+                
+    braiding_index = np.mean(nb_channels)  
     
-    return elevation_array
-
-def compute_above_length(dem, synthetic_elevation, y_res):
-    """
-    Computes the length of segments where the synthetic elevation values are above the DEM values.
-
-    Parameters:
-    dem (np.ndarray): Original DEM array.
-    synthetic_elevation (np.ndarray): Synthetic elevation array.
-    y_res (float): Resolution along the y-axis.
-
-    Returns:
-    np.ndarray: Array containing lengths of segments where synthetic values are above DEM values.
-    """
-    # Count the number of times synthetic elevation is greater than DEM along each column
-    above_length = np.nansum(synthetic_elevation > dem, axis=0) * y_res
-    return above_length
-
-def plot_profiles_and_above_length(dem, synthetic_elevation, above_length, x_res, y_res):
-    """
-    Plots the elevation profiles for the DEM, synthetic elevation, and the lengths of segments 
-    where synthetic values are above DEM values.
-
-    Parameters:
-    dem (np.ndarray): Original DEM array.
-    synthetic_elevation (np.ndarray): Synthetic elevation array.
-    above_length (np.ndarray): Lengths of segments where synthetic values are above DEM values.
-    x_res (float): Resolution along the x-axis.
-    y_res (float): Resolution along the y-axis.
-    """
-    y = np.arange(dem.shape[0]) * y_res
-    x = np.arange(dem.shape[1]) * x_res
-    num_profil = 200
-    y_dem = dem[:, num_profil]  # Taking the profile from the 200th column (adjust as needed)
-    y_synthetic = synthetic_elevation[:, num_profil]  # Taking the profile from the 200th column (adjust as needed)
-
-    # Calculate the difference between synthetic elevation and DEM
-    difference = synthetic_elevation - dem
+    return braiding_index
     
-    # Identify where the sign changes along each column
-    sign_changes = np.diff(np.sign(difference), axis=0)
+def fill_small_holes(matrix, avg_target_kernel, area_threshold, connectivity, value=None):
     
-    # Create a mask for the sign change points
-    sign_change_points_mask = np.abs(sign_changes) == 2
-    y_mask, x_mask = np.where(sign_change_points_mask)
-    y_mask = y_mask[x_mask==num_profil]
-    x_points = y_mask 
-    y_points = []
-    for i in x_points:
-        elevation = y_dem[i]
-        y_points = np.append(y_points,elevation)
+    # Convert matrix in bool matrix
+    matrix_bool = np.where(matrix>0, 1, 0)
+    matrix_bool = np.where(matrix<0, 1, matrix_bool)
+    matrix_bool = np.array(matrix_bool, dtype='bool') # Convert in array of bool
     
-    max_y = np.nanmax(dem)
-    min_y = np.nanmin(dem)
+    # Set target and average
+    ker=np.ones((avg_target_kernel,avg_target_kernel), np.float32)/(avg_target_kernel**2)
+    matrix_target = np.where(np.isnan(matrix), 0, matrix)
     
-    plt.figure(figsize=(12, 12))
+    if value == None:
+        matrix_target = cv2.filter2D(src=matrix_target,ddepth=-1, kernel=ker)
+    elif value != None:
+        matrix_target = np.ones((matrix.shape))*value
     
-    plt.subplot(3, 1, 1)
-    plt.plot(y, y_dem,'k.', label='DEM', color='black',ls='-',lw=1)
-    plt.plot(y, y_synthetic, 'b.', label='Synthetic Elevation', color='blue',ls='-',lw=1)
-    plt.scatter(x_points* y_res, y_points, color='red', s=20, label='Sign Change Points')
-    plt.xlabel('Y Axis (mm)')
-    plt.ylabel('Elevation')
-    plt.title('Elevation Profile along the Y Axis')
-    plt.ylim(min_y,max_y)
-    plt.legend()
-    plt.grid(True)
-    
-    plt.subplot(3, 1, 2)
-    plt.plot(x, above_length, label='Length of Synthetic Values Above DEM', color='green')
-    plt.xlabel('X Axis (mm)')
-    plt.ylabel('Length (mm)')
-    plt.title('Length of Segments where Synthetic Values are Above DEM')
-    plt.legend()
-    plt.grid(True)
 
-    plt.tight_layout()
-    plt.show()
-
-def find_best_max_elevation(dem, border_mask, slope, x_res, y_res, mean_wetted_width, max_elevation_start, max_elevation_end, step):
-    best_max_elevation = None
-    best_mean_above_length = None
-    min_diff = float('inf')
-    for max_elevation in np.arange(max_elevation_start, max_elevation_end, step):
-        synthetic_elevation = generate_elevation_array(dem.shape, max_elevation, slope, x_res)
-        synthetic_elevation = np.where(border_mask == 0, np.nan, synthetic_elevation)
-        above_length = compute_above_length(dem, synthetic_elevation, y_res)
-        mean_above_length = np.nanmean(above_length)
-        
-        diff = abs(mean_above_length - mean_wetted_width)
-        
-        if diff < min_diff:
-            min_diff = diff
-            best_max_elevation = max_elevation
-            best_mean_above_length = mean_above_length
-        
-        if min_diff == 0:
-            break
+    # Perform morphological analysis
+    matrix_out = morphology.remove_small_holes(matrix_bool, area_threshold=area_threshold, connectivity=connectivity)
     
-    return best_max_elevation, best_mean_above_length
-
-def compute_water_depth(dem, synthetic_elevation):
-    """
-    Computes the water depth as the difference between synthetic elevation and DEM.
-
-    Parameters:
-    dem (np.ndarray): Original DEM array.
-    synthetic_elevation (np.ndarray): Synthetic elevation array.
-
-    Returns:
-    np.ndarray: Array containing the water depth values.
-    """
-    water_depth = synthetic_elevation - dem
-    water_depth = np.where(water_depth < 0, 0, water_depth)
-    return water_depth
-
-def save_water_depth(file_path, headers, water_depth):
-    """
-    Saves the water depth array to a text file with the given headers.
-
-    Parameters:
-    file_path (str): Path to the output file.
-    headers (list): List of header lines to be written at the top of the file.
-    water_depth (np.ndarray): Water depth array to be saved.
-    """
-    with open(file_path, 'w') as f:
-        for header in headers:
-            f.write(header)
-        np.savetxt(f, water_depth, fmt='%.6f')
-
-def plot_dem_with_sign_change_points(dem, synthetic_elevation):
-    """
-    Plots the DEM with points highlighted in red where the sign of the difference
-    between DEM and synthetic elevation changes.
-
-    Parameters:
-    dem (np.ndarray): Original DEM array.
-    synthetic_elevation (np.ndarray): Synthetic elevation array.
-    """
-    # Calculate the difference between synthetic elevation and DEM
-    difference = synthetic_elevation - dem
+    # Apply the target where holes have to be filled
+    matrix_out = np.where(matrix_bool!=matrix_out, matrix_target, matrix)
     
-    # Identify where the sign changes along each column
-    sign_changes = np.diff(np.sign(difference), axis=0)
+    # matrix_out = matrix_target*matrix_out
     
-    # Create a mask for the sign change points
-    sign_change_points_mask = np.abs(sign_changes) == 2
-    
-    plt.figure(figsize=(10, 8))
-    plt.imshow(dem, cmap='terrain', interpolation='none')
-    plt.colorbar(label='Elevation')
-    
-    y, x = np.where(sign_change_points_mask)
-    plt.scatter(x, y, color='red', s=10, label='Sign Change Points')
-    
-    plt.xlabel('X Axis')
-    plt.ylabel('Y Axis')
-    plt.title('DEM with Sign Change Points for Water Surface Intersection')
-    plt.legend()
-    plt.show()
+    return matrix_out, matrix_target
 
 
 def filter_water_depth_mask(array, y_res, min_width_ones=3, min_width_zeros=2):
@@ -218,8 +73,9 @@ def filter_water_depth_mask(array, y_res, min_width_ones=3, min_width_zeros=2):
     mask (np.ndarray): Water depth mask.
     """
     y, x = array.shape
-    min_width_ones = min_width_ones // y_res # transform mm in pixels
-    min_width_zeros = min_width_zeros // y_res # transform mm in pixels
+    y_res_mm = y_res * 1000
+    min_width_ones = min_width_ones // y_res_mm  # transform mm in pixels
+    min_width_zeros = min_width_zeros // y_res_mm  # transform mm in pixels
     for j in range(x):  # iterate over each column
         consecutive_ones = 0
         for i in range(y):  # iterate over each element in the column
@@ -250,49 +106,34 @@ def filter_water_depth_mask(array, y_res, min_width_ones=3, min_width_zeros=2):
             for k in range(y - consecutive_zeros, y):
                 array[k, j] = 1
     return array
-
-
-def compute_braiding_index(array, step=1):
-    # Ensure the array is a NumPy array
-    array = np.array(array)
     
-    # Get the shape of the array
-    y, x = array.shape
-    
-    # Initialize a list to store the count of changes for each column
-    nb_measurement = 0
-    for col in range(0,x,step):
-        nb_measurement = nb_measurement + 1
+def read_tif(file_path):
+    with rasterio.open(file_path) as src:
+        array = src.read(1)  # Read the first band
+    return array
 
-    nb_channels = [0] * nb_measurement
+def save_water_depth(file_path, headers, water_depth):
+    """
+    Saves the water depth array to a text file with the given headers.
 
-    # Iterate through each column
-    for i,col in enumerate(range(0,x,step)):
-        # Start with the initial condition check
-        if array[0, col] == 1:
-            nb_channels[i] += 1
-            
-        # Check for changes from 0 to 1 in the column
-        for row in range(1, y):
-            if array[row-1, col] == 0 and array[row, col] == 1:
-                nb_channels[i] += 1
-                
-    braiding_index = np.mean(nb_channels)  
-    
-    return braiding_index
+    Parameters:
+    file_path (str): Path to the output file.
+    headers (list): List of header lines to be written at the top of the file.
+    water_depth (np.ndarray): Water depth array to be saved.
+    """
+    with open(file_path, 'w') as f:
+        for header in headers:
+            f.write(header)
+        np.savetxt(f, water_depth, fmt='%.6f')
 
 ####### Script ##################################################################################
 
 # Options 
-Active_braiding_index = 1
-Total_braiding_index = 0
+Active_braiding_index = 0
+Total_braiding_index = 1
 
 # Parameters
 folder_home = os.getcwd()
-slope = 0.00037  # longitudinal Slope applied along the x-axis (only for Total_braiding index)
-data_name = 'TPiQs'
-
-
 
 if Active_braiding_index == 1:
     # Parameters
@@ -359,75 +200,117 @@ if Active_braiding_index == 1:
             
 if Total_braiding_index == 1:
     # Parameters
-    dem_name = 'matrix_bed_W06_Q05_s9.txt'
-    path_dem = os.path.join(folder_home, data_name ,'Laser_survey','W06_Q05', 'DEMs', 'survey_9', dem_name)
-    mask_name = 'mask_borders_W06_Q05.txt'
-    path_border_mask = os.path.join(folder_home,data_name ,'Laser_survey', 'W06_Q05', mask_name)
-    path_water_depth = os.path.join(folder_home,data_name ,'Laser_survey', 'W06_Q05', 'Water_depth')
-    x_res = 50  # Resolution along the x-axis in mm
-    y_res = 5  # Resolution along the y-axis in mm
-    water_depth_filename = dem_name[:-4] + '_water_depth.txt'
-    east_coord = 13807 # to plot the DoD with the actual extent
-    mean_wetted_width = 510 # User-defined mean wetted width in mm
+    filename = 'q05_1_DEM9_hw.tif'
+    print('*****************')
+    print(filename)
+    print('*****************')
+    path = os.path.join(folder_home,  'hydraulic_analysis', 'output_data','water_depth_maps')
+    target_wetted_width = 0.51 # in m
+    x_res = 0.050  # Resolution along the x-axis in m
+    y_res = 0.005  # Resolution along the y-axis in m
+    cs_step = 50  #number of pixels between each cross section to compute braiding index,  10px=5cm (along dx) and 1px=0.5cm (along dy) 
+    
+    # Load water depth map computed from the hydraulic model
+    water_depth = read_tif(os.path.join(path,filename))
+    dy, dx = np.shape(water_depth)
 
-    # Load DEM
-    headers, DEM = read_data(path_dem)
-    shape = np.shape(DEM)
+    ##### 1. Select the optimal threshold procedure ######################################################
+    # Loop over water depth threshold to fit the targetted wetted width (target_wetted_width)
+    WD_threshold_range = np.arange(np.min(water_depth), np.max(water_depth), 2e-4)
 
-    # Load border mask
-    headers, border_mask = read_data(path_border_mask)
+    wetted_width_thrs_list = []
+    for t in WD_threshold_range:
+        water_depth_thrs = np.where(water_depth>=t, water_depth, 0)
+        water_depth_thrs_area = len(water_depth_thrs[water_depth_thrs>0])
+        wetted_width_thrs =  water_depth_thrs_area/dx * y_res
+        wetted_width_thrs_list = np.append(wetted_width_thrs_list, wetted_width_thrs)
+        
+    # Find the index of the element closest to target_wetted_width
+    closest_index = min(range(len(wetted_width_thrs_list)), key=lambda v: abs(wetted_width_thrs_list[v] - target_wetted_width))
+    wetted_width = wetted_width_thrs_list[closest_index]
+    WD_thrs = WD_threshold_range[closest_index]
+    print(f'The optimal threshold is: {WD_thrs} m')
+    print(f'The wetted width is: {wetted_width} m')
+    ######################################################################################################
 
-    # Apply mask
-    DEM = np.where(border_mask == 0, np.nan, DEM)
+    ##### 2. Filtering procedure ######################################################
+    # 2.1 Filter the water_depth mask with the optimal threshold
+    water_depth_thrs = np.where(water_depth >= WD_thrs, water_depth, 0) 
+    water_depth_mask = np.where(water_depth_thrs >0, 1, 0)
+    water_depth_mask_copy = np.copy(water_depth_mask)
 
-    # Find the best max_elevation
-    max_elevation_start = np.nanmax(DEM[:, 0])  # Starting max elevation
-    max_elevation_end = np.nanmin(DEM[:, 0])  # Ending max elevation
-    step = -0.1  # Step size for max elevation
+    water_depth_rsm_mask = morphology.remove_small_objects(water_depth_mask_copy>0, min_size=200, connectivity=1)
+    water_depth_rsm = water_depth_mask*water_depth_rsm_mask
     
-    best_max_elevation, best_mean_above_length = find_best_max_elevation(DEM, border_mask, slope, x_res, y_res, mean_wetted_width, max_elevation_start, max_elevation_end, step)
+    # 2.2 FILL SMALL HOLES
+    water_depth_rsm_hls= morphology.remove_small_holes(water_depth_rsm, area_threshold=100, connectivity=1)
+    water_depth_rsm_hls_copy = np.copy(water_depth_rsm_hls)
+
+    # 2.3 clean edges between channels and bars
+    # Step 1: Convert the image to 0 and 255 (required for cv2.erode)
+    water_depth_rsm_hls_binary = water_depth_rsm_hls_copy * 255
+    water_depth_rsm_hls_binary = water_depth_rsm_hls_binary.astype(np.uint8)
+    # Step 2: Define the kernel (structuring element) for erosion
+    kernel = np.ones((3, 3), np.uint8)  # A 5x5 square kernel
+    # Step 3: Perform opening operation 
+    water_depth_opened = cv2.morphologyEx(water_depth_rsm_hls_binary, cv2.MORPH_OPEN, kernel)#cv2.erode(water_depth_rsm_hls_binary, kernel, iterations=1)
+
+    #2.4 apply connected component to label the objects and keep only those that represents channels
+    # Step 1:
+    num_labels, labels_im, stats, centroids = cv2.connectedComponentsWithStats(water_depth_opened, connectivity=4)
+    # Step 3: Set a minimum area threshold for filtering
+    min_area = 2000  # Define your area threshold in pixels, 10px=5cm (along dx) and 1px=0.5cm (along dy) 
+
+    # Step 4: Create a new binary image to hold only the large components
+    water_depth_filtered = np.zeros_like(water_depth_opened)
+
+    # Step 5: Loop through each component and filter based on area
+    for i in range(1, num_labels):  # Start from 1 to skip the background (label 0)
+        area = stats[i, cv2.CC_STAT_AREA]
+        if area >= min_area:
+            # Keep the component if it meets the area threshold
+            water_depth_filtered[labels_im == i] = 255
+            
+    # Step 6: Convert the eroded image back to 0 and 1 if needed
+    water_depth_filtered = water_depth_filtered // 255  # Dividing by 255 to get 0 and 1 back
+    water_depth_filtered_copy = np.copy(water_depth_filtered)
     
-    # Generate synthetic elevation array with the best max elevation
-    synthetic_elevation = generate_elevation_array(shape, best_max_elevation, slope, x_res)
-    synthetic_elevation = np.where(border_mask == 0, np.nan, synthetic_elevation)
+    # 2.5 Filter out channels width < min_width_ones along each cross section
+    water_depth_map_final = filter_water_depth_mask(water_depth_filtered_copy, y_res,min_width_ones=40,min_width_zeros=20)
+
+    ######################################################################################################
+
     
-    # Compute lengths of segments where synthetic values are above DEM values
-    above_length = compute_above_length(DEM, synthetic_elevation, y_res)
-    
-    # Plot the profiles and above length
-    plot_profiles_and_above_length(DEM, synthetic_elevation, above_length, x_res, y_res)
-    
-    # Plot DEM with closest points
-    plot_dem_with_sign_change_points(DEM, synthetic_elevation)
-    
-    # Compute water depth
-    water_depth = compute_water_depth(DEM, synthetic_elevation)
-    water_depth = np.where(np.isnan(water_depth), -999, water_depth)
-    
-    # Save water depth to a .txt file
-    if not os.path.exists(path_water_depth):
-        os.mkdir(path_water_depth)
-    #save dem
-    update_headers(headers, east_coord)
-    save_water_depth(os.path.join(path_water_depth, dem_name), headers, DEM)
-    
-    save_water_depth(os.path.join(path_water_depth, water_depth_filename), headers, water_depth)
-    
-    # Water depth mask
-    water_depth_mask = np.where(water_depth>0,1,0) # value is in mm
-    water_depth_mask_filename = dem_name[:-4] + '_water_depth_mask.txt'
-    
-    save_water_depth(os.path.join(path_water_depth, water_depth_mask_filename), headers, water_depth_mask)
-    
-    # Filter water_depth mask
-    water_depth_filtered = filter_water_depth_mask(water_depth_mask, y_res,min_width_ones=50,min_width_zeros=10)
-    water_depth_mask_filename = dem_name[:-4] + '_water_depth_mask_filtered.txt'
-    save_water_depth(os.path.join(path_water_depth, water_depth_mask_filename), headers, water_depth_filtered)
-    
+    # Option: plot the filtered water depth map
+    fig, (ax1, ax2, ax3, ax4, ax5, ax6, ax7) = plt.subplots(7,1,figsize=(14,14))
+    aspect= 1
+    ax1.imshow(water_depth_mask, cmap = 'Blues', aspect=aspect)
+    ax2.imshow(water_depth_rsm, cmap = 'Blues', aspect=aspect)
+    ax3.imshow(water_depth_rsm_hls, cmap = 'Blues', aspect=aspect)
+    ax4.imshow(water_depth_opened, cmap = 'Blues', aspect=aspect)
+    # Step 3: Normalize the labels image for visualization
+    # Normalize the labels to the range 0-255 for visualization purposes
+    labels_normalized = (labels_im.astype(np.float32) / num_labels) * 255
+    labels_normalized = labels_normalized.astype(np.uint8)
+
+    # Step 4: Apply a color map to the normalized labels image
+    colored_labels = cv2.applyColorMap(labels_normalized, cv2.COLORMAP_TURBO)
+    ax5.imshow(colored_labels, aspect=aspect)
+    ax6.imshow(water_depth_filtered, cmap = 'Blues', aspect=aspect)
+    ax7.imshow(water_depth_map_final, cmap = 'Blues', aspect=aspect)
+    # Vertical cross-sections (for columns)
+    for col in range(0, dx, cs_step):
+        ax7.axvline(x=col, color='k', linestyle='--', linewidth=1)
+    ax1.set_title('Water depth map thresholded (mask)')
+    ax2.set_title('1. Water depth map rsm (mask)')
+    ax3.set_title('2. Water depth map remove holes (mask)')
+    ax4.set_title('3. Water depth map cleaned (opening operation)')
+    ax5.set_title('4a. Water depth map labeled')
+    ax6.set_title('4b. Water depth map filtered')
+    ax7.set_title('5. Water depth map (final)')
+    plt.tight_layout()
+    plt.show()
     
     # Compute total braided index
-    total_braiding_index = compute_braiding_index(water_depth_filtered)
-    print(f"Best Max Elevation: {best_max_elevation}")
-    print(f"Mean Above Length for Best Max Elevation: {best_mean_above_length}")
-    print(f"Water depth data saved to {os.path.join(path_water_depth, water_depth_filename)}")
+    total_braiding_index = compute_braiding_index(water_depth_filtered, cs_step)
     print(f"Total braiding index is {total_braiding_index}")
