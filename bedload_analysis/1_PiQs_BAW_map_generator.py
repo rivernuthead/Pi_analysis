@@ -412,7 +412,7 @@ for run_index, run in enumerate(runs):
         banks_noise_bool = np.array(banks_noise_bool)[:dim_y,:dim_x]
         banks_noise_bool = (banks_noise_bool>0)*shad_coeff
         
-        # REMOVE BANKS NOSIE
+        # REMOVE BANKS NOISE
         diff_arr_msk = diff_arr-banks_noise_bool*1  # Remove noise array  (Difference between integer)
         
         diff_arr_msk = diff_arr_msk*(diff_arr_msk>0) # Trim negative values
