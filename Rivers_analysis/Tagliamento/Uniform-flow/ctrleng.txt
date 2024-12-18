@@ -1,0 +1,149 @@
+ data: 20241203 132626.290
+ Dati topografia sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\tag2.txt
+ 
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no1_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no1_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no1_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no1_Nov22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no2_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no2_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no2_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no2_Nov22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no3_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no3_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no3_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no3_Nov22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no4_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no4_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no4_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no4_Nov22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no5_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no5_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no5_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no5_Nov22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no6_Feb21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no6_Sep21.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no6_Jan22.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinza
+  no6_Nov22.sez
+ 
+ Fine

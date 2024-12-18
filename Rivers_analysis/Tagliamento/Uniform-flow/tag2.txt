@@ -1,0 +1,26 @@
+24								if		Q	ndx	ndy	dx	dy	partenza
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano1_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano1_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano1_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano1_Nov22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano2_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano2_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano2_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano2_Nov22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano3_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano3_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano3_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano3_Nov22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano4_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano4_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano4_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano4_Nov22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano5_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano5_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano5_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano5_Nov22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano6_Feb21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano6_Sep21.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano6_Jan22.txt			0.0033		200	1	616	12	1	1
+C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\inputs\Pinzano6_Nov22.txt			0.0033		200	1	616	12	1	1
+

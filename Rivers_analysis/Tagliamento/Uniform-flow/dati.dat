@@ -1,0 +1,14 @@
+File cross section data
+    'C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\tag2.txt'     	3	mode for data reading
+file with discahrge list
+    'C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\discharge.dat'
+File output
+	'C:\Users\thoma\Documents\Trento\python\Data\Tagliamento\Uniform-flow\results_tag.txt'
+constant k for C computation (C=6+2.5 ln( Y / k d50) (0 = direct reading from file)
+0
+density		D50 [m]	 transport equation (1:MPM, 2:Parker,1990, 3:Bagnold,1980)
+1.65		0.028			2
+threshold (shields) for computation of active width
+0.047
+minimum depth for considering a cell wet (number of d50s)
+1
