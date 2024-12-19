@@ -1,0 +1,71 @@
+ data: 20241218 173738.915
+ Dati topografia sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\rees.txt
+ 
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_1.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_2.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_3.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_4.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_5.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_6.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_7.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_8.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_9.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_10.sez
+ 
+ Lettura topografia sezioni modo:           3
+ Modo 3, uscita magicsez
+ Fase di lettura sezioni conclusa
+ Riassunto dopo la lettura sezioni in: C:\Users\thoma\Documents\Trento\python\Data\Rees\Uniform-flow\inputs\e00_clean_cr
+  oss_section_11.sez
+ 
+ Fine
