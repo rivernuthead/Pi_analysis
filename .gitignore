@@ -178,8 +178,7 @@ cython_debug/
 #*.tiff
 
 # Folders
-/morphological_analysis/output_data
-/morphological_analysis/output_data
+
 /morphological_analysis/old_codes
 /morphological_analysis/output_data
 /morphological_analysis/plots
@@ -189,15 +188,5 @@ cython_debug/
 /bedload_analysis/input_data
 /bedload_analysis/plots
 
-\\morphological_analysis\output_data
-\\morphological_analysis\output_data
-\\morphological_analysis\old_codes
-\morphological_analysis\output_data
-\\morphological_analysis\plots
-\\bedload_analysis\output_data
-\\bedload_analysis\old_codes
-\\bedload_analysis\plots
-\\bedload_analysis\input_data
-\\bedload_analysis\plots
 /morphological_analysis/output_data
 /morphological_analysis/output_data/DoDs/DoDs_maps
