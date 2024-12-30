@@ -147,7 +147,7 @@ for i, set_name in enumerate(set_names):
     threshold_pure_std_array = np.loadtxt(os.path.join(output_dir, set_name + '_threshold_pure_std_array.txt'), delimiter=',')
     MAW_mean_std = np.loadtxt(os.path.join(output_dir, set_name + '_MAW_mean_std.txt'), delimiter=',')
 
-    envBAW_mean_std = np.loadtxt(os.path.join('/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/output_report/', BAW_set_name + '_envBAW_merged_single_runs.txt'), delimiter=',', skiprows=0)
+    envBAW_mean_std = np.loadtxt(os.path.join(os.getcwd(), 'bedload_analysis','output_data', 'output_report', BAW_set_name + '_envBAW_merged_single_runs.txt'), delimiter=',', skiprows=0)
     envMAW = np.loadtxt(os.path.join(env_dir, set_name + '_timespan0_envMAW_report.txt'), delimiter=',')
     
     BAW_x_values = np.linspace(0, np.max(MAW_x_values), len(envBAW_mean_std[0,:]))
@@ -267,7 +267,7 @@ for i, set_name in enumerate(set_names):
     threshold_pure_mean_array = np.loadtxt(os.path.join(output_dir, set_name + '_threshold_pure_mean_array.txt'), delimiter=',')
     threshold_pure_std_array = np.loadtxt(os.path.join(output_dir, set_name + '_threshold_pure_std_array.txt'), delimiter=',')
     MAW_mean_std = np.loadtxt(os.path.join(output_dir, set_name + '_MAW_mean_std.txt'), delimiter=',')
-    envBAW_mean_std = np.loadtxt(os.path.join('/home/erri/Documents/PhD/Research/5_research_repos/PiQs_analysis/output_report/', BAW_set_name + '_envBAW_merged_single_runs.txt'), delimiter=',', skiprows=0)
+    envBAW_mean_std = np.loadtxt(os.path.join(os.getcwd(), 'bedload_analysis', 'output_data', 'output_report', BAW_set_name + '_envBAW_merged_single_runs.txt'), delimiter=',', skiprows=0)
     envMAW = np.loadtxt(os.path.join(home_dir,'output_data', 'envelopes', set_name + '_timespan0_envMAW_report.txt'), delimiter=',')
     
     BAW_x_values = np.linspace(0, np.max(MAW_x_values), len(envBAW_mean_std[0,:]))
