@@ -178,6 +178,7 @@ cython_debug/
 
 # Folders
 /morphological_analysis/output_data
+/morphological_analysis/output_data
 /morphological_analysis/old_codes
 /morphological_analysis/output_data
 /morphological_analysis/plots
