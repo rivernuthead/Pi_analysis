@@ -171,6 +171,7 @@ cython_debug/
 *.npy
 
 # image files
+*.pdf
 #*.jpg
 #*.png
 #*.tif
