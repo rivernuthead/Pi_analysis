@@ -28,13 +28,14 @@ set_names = ['q07_1', 'q10_2', 'q15_3', 'q20_2']
 # set_names = ['q07_1', 'q10_2', 'q10_3', 'q10_4','q15_2', 'q15_3', 'q20_2']
 # set_names = ['q10_3', 'q10_4']
 
-# set_names = ['q05_1']
+set_names = ['q05_1']
 # set_names = ['q07_1']
 # set_names = ['q10_2']
 # set_names = ['q15_2']
 # set_names = ['q15_3']
 # set_names = ['q20_2']
 
+# home_dir = os.path.join(os.getcwd(), 'morphological_analysis') # Home directory
 home_dir = os.path.join(os.getcwd(), 'morphological_analysis') # Home directory
 output_dir = os.path.join(home_dir, 'output_data','comp_thrs_analysis')
 if not(os.path.exists(output_dir)):

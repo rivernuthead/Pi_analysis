@@ -9,7 +9,7 @@ import os
 import numpy as np
 
 
-runs = ['q05_1', 'q07_1', 'q10_2','q10_3','q10_4', 'q15_2','q15_3', 'q20_2']
+runs = ['q05_1', 'q07_1', 'q10_2','q10_3', 'q15_2','q15_3', 'q20_2']
 
 # runs = ['q05_1']
         
@@ -20,8 +20,8 @@ for run in runs:
     
     # Step 1: List all files in the folder
     home_dir = os.getcwd()
-    input_folder = os.path.join(home_dir,'morphological_analysis','input_data', 'surveys',run)
-    output_folder = os.path.join(os.getcwd(), 'morphological_analysis', 'output_data', 'DEM_stack')
+    input_folder = os.path.join(home_dir,'input_data', 'surveys',run)
+    output_folder = os.path.join(os.getcwd(), 'output_data', 'DEM_stack')
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -62,7 +62,7 @@ for run in runs:
     # Different mask will be applied depending on the run due to different ScanArea
     # used during the laser surveys
     runs_list = ['q10_1', 'q10_2', 'q15_1', 'q20_1', 'q20_2'] # Old runs with old ScanArea
-    mask_folders_path =  os.path.join(home_dir, 'morphological_analysis', 'input_data', 'masks')
+    mask_folders_path =  os.path.join(home_dir, 'input_data', 'masks')
     array_mask_name, array_mask_path = 'array_mask.txt', mask_folders_path # Mask for runs 07 onwards
 
     if run in runs_list:

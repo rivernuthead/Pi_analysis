@@ -65,7 +65,7 @@ NaN = -999
 # SETUP FOLDERS and RUNS
 ###############################################################################
 # setup working directory and DEM's name
-home_dir = os.path.join(os.getcwd(), 'morphological_analysis')
+home_dir = os.path.join(os.getcwd())
 out_dir = os.path.join(home_dir, 'output_data')
 plot_out_dir = os.path.join(home_dir, 'plots')
 
