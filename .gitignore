@@ -200,3 +200,4 @@ cython_debug/
 \\bedload_analysis\input_data
 \\bedload_analysis\plots
 /morphological_analysis/output_data
+/morphological_analysis/output_data/DoDs/DoDs_maps
