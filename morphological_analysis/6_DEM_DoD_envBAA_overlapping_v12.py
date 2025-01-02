@@ -113,7 +113,7 @@ if not(os.path.exists(output_folder)):
 
 #run_names = ['q07r1', 'q07r2', 'q07r3', 'q07r4', 'q07r5', 'q07r6', 'q07r7', 'q07r8', 'q07r9']
 # run_names = ['q10r1', 'q10r2', 'q10r3', 'q10r4', 'q10r5', 'q10r6', 'q10r7', 'q10r8', 'q10r9']
-run_names = ['q05r9']
+run_names = ['q10r9']
 # # run_names = ['q15r1', 'q15r2', 'q15r3', 'q15r4', 'q15r5', 'q15r6', 'q15r7', 'q15r8', 'q15r9']
 
 # run_names = ['q15r1', 'q15r3', 'q15r4', 'q15r5', 'q15r6', 'q15r8', 'q15r9']

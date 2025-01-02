@@ -43,8 +43,8 @@ from PiQs_BAW_func_v1 import *
 # runs = ['q15r1']
 # runs = ['q20r9']
 # runs = ['q20r1']
-runs = ['q05rgm5']
-set_names = ['q05_1']
+runs = ['q10r9']
+set_names = ['q10_2']
 
 #runs = ['q05r1','q05r2','q05r3','q05r4','q05r5','q05r6','q05r7','q05r8','q05r9']
 # runs = ['q07r1','q07r2','q07r3','q07r4','q07r5','q07r6','q07r7','q07r8','q07r9']

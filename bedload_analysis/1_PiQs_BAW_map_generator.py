@@ -58,8 +58,8 @@ from PiQs_BAW_func_v1 import *
 # runs = ['q20r1','q20r2','q20r3','q20r4','q20r5','q20r6','q20r7','q20r8','q20r9']
 # runs = ['q07rgm', 'q10rgm2', 'q15rgm2', 'q20rgm2']
 # runs = ['q07rgm', 'q10rgm2', 'q15rgm2']
-runs = ['q05rgm5']
-set_names = ['q05_1']
+runs = ['q10r9']
+set_names = ['q10_2']
 # runs = ['q07rgm']
 
 # SCRIPT MODE -----------------------------------------------------------------
@@ -170,7 +170,7 @@ for run_index, run in enumerate(runs):
         else:
             pass
         
-    diff_path = os.path.join(path_diff, diff_names[1]) # Define image path
+    diff_path = os.path.join(path_diff, diff_names[0]) # Define image path
     diff = Image.open(diff_path) # Open image as image
 
     diff_arr = np.array(diff) # Convert image as numpy array
@@ -281,9 +281,9 @@ for run_index, run in enumerate(runs):
             blurry_stack = np.zeros((3,diff_arr.shape[0], diff_arr.shape[1])) # Initialize stack where allocate the three images that define the difference
             
             # # For each difference, find the name of the related photos
-            name1 = photo_names[index]
-            name2 = photo_names[index+1]
-            name3 = photo_names[index+2]
+            name1 = diff_names[index]
+            name2 = diff_names[index+1]
+            name3 = diff_names[index+2]
             
             # 2. LOOP TO FILL THE STACK with the three blurry areas detected images
             i=0
